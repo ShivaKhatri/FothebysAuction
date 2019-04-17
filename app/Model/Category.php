@@ -21,4 +21,8 @@ class Category extends Model
     {
         return $this->hasMany('App\Model\Detail','category_id');
     }
+    public function subCategory()
+    {
+        return $this->hasMany('App\Model\SubCategory','category_id');
+    }
 }

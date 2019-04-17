@@ -1,6 +1,11 @@
 @extends('backend.layout')
 
 @section('content')
+    <nav class="breadcrumb">
+        <a class="breadcrumb-item" href="{{route('home')}}">Home</a>
+        <a class="breadcrumb-item" href="{{route('category.index')}}">Category</a>
+        <span class="breadcrumb-item active">Details</span>
+    </nav>
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-12">
@@ -14,12 +19,10 @@
                 </div>
             </div>
         </div>
+
     </div>
 
-    <div class="col-md-1 col-sm-1 col-xs-1" >
-        <a href="{{route('detailValue.create')}}" class="btn btn-sm btn-primary" style="margin:3px"><i
-                    class="glyphicon glyphicon-plus"></i> Additional Details</a>
-    </div>
+
 @endsection
 
 @section('scripts')
@@ -45,7 +48,7 @@
                 type: "DELETE",
                 url: $this.attr('href')
             }).done(function (data) {
-                window.location.replace('/classification');
+                window.location.replace('/detail');
             });
         });
     </script>

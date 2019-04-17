@@ -25,19 +25,20 @@ class HomeController extends Controller
      */
     public function index()
     {
-        if (Auth::user()->Cstatus=='Admin') {
-            return view('backend/Users/admin');
+        $Cstatus=Auth::user()->Cstatus;
+        if ($Cstatus=='Admin') {
+            return view('backend/Users/admin')->with('Cstatus',$Cstatus);
         }
-        elseif (Auth::user()->Cstatus=='Seller'){
-            return view('backend/Users/seller');
+        elseif ($Cstatus=='Seller'){
+            return view('backend/Users/seller')->with('Cstatus',$Cstatus);
 
         }
-        elseif (Auth::user()->Cstatus=='Buyer'){
-            return view('backend/Users/buyer');
+        elseif ($Cstatus=='Buyer'){
+            return view('backend/Users/buyer')->with('Cstatus',$Cstatus);
 
         }
-        elseif (Auth::user()->Cstatus=='Both'){
-            return view('backend/Users/both');
+        elseif ($Cstatus=='Both'){
+            return view('backend/Users/both')->with('Cstatus',$Cstatus);
 
         }
         else{

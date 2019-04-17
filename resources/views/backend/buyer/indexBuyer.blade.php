@@ -41,7 +41,7 @@
                 type: "DELETE",
                 url: $this.attr('href')
             }).done(function (data) {
-                window.location.replace('/category');
+                window.location.replace('/buyer');
             });
         });
     </script>

@@ -1,7 +1,13 @@
 @extends('backend.layout')
 @section('content')
+    <nav class="breadcrumb">
+        <a class="breadcrumb-item" href="{{route('home')}}">Home</a>
+        <a class="breadcrumb-item" href="{{route('users.index')}}">Users</a>
+        <span class="breadcrumb-item active">User Detail</span>
+    </nav>
+    <div class="row d-flex justify-content-center">
 
-<div class="card col-lg-5 col-md-5 col-sm-5 col-xs-5">
+<div class="card col-lg-4 col-md-4 col-sm-4 col-xs-8">
     <div class="card-header">
        <h5 ><strong>{{$user->title}}  {{$user->FirstName}} {{$user->Surname}}</strong></h5>
     </div>
@@ -20,38 +26,5 @@
         <p class="card-text">{{$verified_by->FirstName}} {{$verified_by->Surname}}</p>
     </div>
 </div>
-@if($user->Cstatus=='Buyer'||$user->Cstatus=='Both')
-    <div class="card col-lg-9 col-md-9 col-sm-9 col-xs-9" style="margin-top: 10px">
-        <div class="card-header">
-            <h5 ><strong>Bought Items</strong></h5>
-        </div>
-        <div class="card-body">
-            <table>
-                <thead>
-
-                </thead>
-                <tbody>
-
-                </tbody>
-            </table>
-        </div>
     </div>
-@endif
-@if($user->Cstatus=='Seller'||$user->Cstatus=='Both')
-<div class="card col-lg-9 col-md-9 col-sm-9 col-xs-9" style="margin-top: 10px">
-    <div class="card-header">
-       <h5 ><strong>Sold Items</strong></h5>
-    </div>
-    <div class="card-body">
-        <table>
-            <thead>
-
-            </thead>
-            <tbody>
-
-            </tbody>
-        </table>
-    </div>
-</div>
-@endif
     @endsection

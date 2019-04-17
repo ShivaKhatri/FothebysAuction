@@ -2,6 +2,11 @@
 @section('content')
     {{--<div class="row">--}}
     <!-- general form elements -->
+    <nav class="breadcrumb">
+        <a class="breadcrumb-item" href="{{route('home')}}">Home</a>
+        <a class="breadcrumb-item" href="{{route('classification.index')}}">Classification</a>
+        <span class="breadcrumb-item active">Create Classification</span>
+    </nav>
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-9">

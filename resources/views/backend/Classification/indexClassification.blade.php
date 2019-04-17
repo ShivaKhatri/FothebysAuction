@@ -1,6 +1,10 @@
 @extends('backend.layout')
 
 @section('content')
+    <nav class="breadcrumb">
+        <a class="breadcrumb-item" href="{{route('home')}}">Home</a>
+        <span class="breadcrumb-item active">Classification</span>
+    </nav>
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-12">
@@ -19,11 +23,10 @@
 @endsection
 
 @section('scripts')
-    <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+    <script src="{{asset('js/jquery.dataTables.min.js')}}"></script>
     <!-- from dataTables push-->
-    <script src="https://cdn.datatables.net/buttons/1.4.2/js/dataTables.buttons.min.js"></script>
-    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.0.3/css/buttons.dataTables.min.css">
-    <script src="https://cdn.datatables.net/buttons/1.0.3/js/dataTables.buttons.min.js"></script>
+    <script src="{{asset('js/dataTables.buttons.min.js')}}"></script>
+    <link rel="stylesheet" href="{{asset('css/buttons.dataTables.min.css')}}">
     <script src="{{asset('vendor/datatables/buttons.server-side.js')}}"></script>
     {!! $dataTable->scripts() !!}
     <script>

@@ -24,6 +24,7 @@ class CreateUsersTable extends Migration
             $table->string('phone_no');
             $table->string('address');
             $table->integer('bank_no')->nullable();
+            $table->integer('bidLimit')->nullable();
             $table->integer('bank_sort_no')->nullable();
             $table->string('Cstatus');
             $table->string('Astatus')->nullable();

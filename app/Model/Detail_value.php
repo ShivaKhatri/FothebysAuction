@@ -16,6 +16,6 @@ class Detail_value extends Model
     }
     public function detailValue()
     {
-        return $this->belongsToMany('App\Model\Detail','detail_detail_value','detail_value_id','detail_id');
+        return $this->belongsTo('App\Model\Detail','detail_id');
     }
 }

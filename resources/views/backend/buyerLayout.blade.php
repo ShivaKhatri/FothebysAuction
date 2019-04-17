@@ -73,7 +73,7 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">
+                        <a class="nav-link" href="{{route('commission.index')}}">
                             <span data-feather="bar-chart-2"></span>
                             Commission Bids
                         </a>

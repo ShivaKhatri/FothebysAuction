@@ -3,7 +3,6 @@
 namespace App\DataTables;
 
 use App\Model\Category;
-use App\User;
 use Yajra\DataTables\Services\DataTable;
 
 class CategoryDatatable extends DataTable
@@ -19,14 +18,51 @@ class CategoryDatatable extends DataTable
         return datatables($query)
             ->addColumn('admin', function ($category) {
                 $admin=Category::find($category->id)->admin()->first();
+                $wow=null;
+                if($admin!=null){
                     $wow='<b>'.$admin->FirstName.' '.$admin->Surname.'</b>';
+                }
+                return $wow;
+            })
+            ->addColumn('details', function ($category) {
+                $value=Category::find($category->id)->detail()->get();
+                $count=count($value);
+                $wow='<ol>';
+                foreach($value as $get){
+                    $wow=$wow.'<li>'.$get->name.'</li>';
+
+                }
+                $wow=$wow.'</ol>';
+//                dd($sec);
+                if($count==0){
+                    $wow='<b>No Details Assigned</b>';
+                    return $wow;
+                }
+//                dd($wow);
+                return $wow;
+            })
+            ->addColumn('SubCategory', function ($category) {
+                $value=Category::find($category->id)->subCategory()->get();
+                $count=count($value);
+                $wow='<ol>';
+                foreach($value as $get){
+                    $wow=$wow.'<li>'.$get->name.'</li>';
+
+                }
+                $wow=$wow.'</ol>';
+//                dd($sec);
+                if($count==0){
+                    $wow='<b>No Sub Categories Assigned</b>';
+                    return $wow;
+                }
+//                dd($wow);
                 return $wow;
             })
             ->addColumn('action', function ($category) {
                 return '<a href="'.route('category.edit',$category->id).'" class="btn btn-sm btn-primary" style="margin:3px"><i
                                                     class="glyphicon glyphicon-edit"></i> Edit</a></a>&nbsp;&nbsp;<a href="'.route('category.destroy',$category->id).'" class="btn btn-sm btn-danger" id="delete" ><i class="glyphicon glyphicon-remove"></i> Delete</a>';
             })
-            ->rawColumns(['admin', 'action']);
+            ->rawColumns(['admin', 'details','SubCategory', 'action']);
     }
 
     /**
@@ -37,7 +73,7 @@ class CategoryDatatable extends DataTable
      */
     public function query(Category $model)
     {
-        return $model->newQuery()->select('id', 'name', 'description', 'created_at', 'updated_at');
+        return $model->newQuery()->select('id', 'name', 'description');
     }
 
     /**
@@ -66,8 +102,8 @@ class CategoryDatatable extends DataTable
             'name',
             'description',
             'admin',
-            'created_at',
-            'updated_at'
+            'details',
+            'SubCategory'
         ];
     }
 

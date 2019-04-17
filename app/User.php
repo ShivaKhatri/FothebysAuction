@@ -40,4 +40,8 @@ class User extends Authenticatable
     {
         return $this->hasMany('App\Model\Category','admin_id');
     }
+    public function bid()
+    {
+        return $this->hasMany('App\Model\Commission_Bid','client_id');
+    }
 }

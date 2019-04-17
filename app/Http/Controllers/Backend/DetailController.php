@@ -5,9 +5,11 @@ namespace App\Http\Controllers\Backend;
 use App\DataTables\DetailDatatable;
 use App\Model\Category;
 use App\Model\Detail;
+use App\Model\Detail_value;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class DetailController extends Controller
 {
@@ -47,6 +49,27 @@ class DetailController extends Controller
         $detail->category_id=$request->category_id;
         $detail->admin_id=Auth::user()->id;
         $detail->save();
+
+        for ($i=0; $i<$request->number; $i++) {
+            $value='Valuename'.$i;
+//            dd($value);
+            if($request->Valuename0=="null"){
+                $detail_value = new Detail_value();
+                $detail_value->name = 'null';
+                $detail_value->detail_id = $detail->id;
+                $detail_value->type = $request->type;
+                $detail_value->admin_id = Auth::user()->id;
+                $detail_value->save();
+            }
+            else{
+                $detail_value = new Detail_value();
+                $detail_value->name = $request->$value;
+                $detail_value->detail_id = $detail->id;
+                $detail_value->type = $request->type;
+                $detail_value->admin_id = Auth::user()->id;
+                $detail_value->save();
+            }
+        }
         return redirect('detail');
     }
 
@@ -69,8 +92,9 @@ class DetailController extends Controller
      */
     public function edit($id)
     {
+        $category=Category::all()->pluck('name','id');
         $detail=Detail::find($id);
-        return view('backend.Detail.editDetail')->with('detail',$detail);
+        return view('backend.Detail.editDetail')->with('detail',$detail)->with('category',$category);
     }
 
     /**
@@ -90,6 +114,33 @@ class DetailController extends Controller
             'category_id'=>$request->category_id
 
         ]);
+        $dValue=Detail::find($id)->detailValue()->get();
+//        dd($request->number);
+
+        foreach ($dValue as $get){
+            Detail_value::destroy($get->id);
+        }
+
+        for ($i=0; $i<$request->number; $i++) {
+            $value='Valuename'.$i;//for input names
+//            dd($value);
+            if($request->Valuename0=="null"){
+                $detail_value = new Detail_value();
+                $detail_value->name = 'null';
+                $detail_value->detail_id = $id;
+                $detail_value->type = $request->type;
+                $detail_value->admin_id = Auth::user()->id;
+                $detail_value->save();
+            }
+           else{
+               $detail_value = new Detail_value();
+               $detail_value->name = $request->$value;
+               $detail_value->detail_id = $id;
+               $detail_value->type = $request->type;
+               $detail_value->admin_id = Auth::user()->id;
+               $detail_value->save();
+           }
+        }
         return redirect('detail');
     }
 
@@ -108,7 +159,10 @@ class DetailController extends Controller
             ]);
         }
 
-        Detail::destroy($id);
+        $item_value=DB::table('detail_values');//assigns item value with detail item model
+        $item_value->where('detail_id','=',$id)->delete();//deletes the row whose item id matches with the $id
+
+        Detail::destroy($id);//deletes the item whose item matches the given id
         return response()->json([
             'success' => 'Record deleted successfully!'
         ]);
@@ -121,5 +175,77 @@ class DetailController extends Controller
         $this->model = $query->first();
 
         return $this->model;
+    }
+
+    public function number($id)
+    {
+
+        $html='';
+
+//        for ($i=0; $i < $id; $i++){
+//            $html=$html. ' this';
+//            return json_encode($html);
+//
+//        }
+
+        for ($i=0; $i<$id; $i++){
+            if($id==1){
+
+                    $html=$html. '
+                       <input name="Valuename'.$i.'" type="hidden" value="null">
+                        ';
+            }
+            else{
+                $html=$html. '
+                        <div class="form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12" >Detail Name<span class="required">*</span>
+                            </label>
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                <input name="Valuename'.$i.'"
+                                           class="form-control col-lg-12 col-md-12 col-sm-12 col-xs-12"
+                                           type = "text"
+                                           required=""
+                                    />
+                            </div>
+                        </div>
+                        ';
+            }
+
+        }
+        return json_encode($html);
+
+    }
+
+    public function numberEdit($use,$id)
+    {
+
+        $html='';
+
+
+        for ($i=0; $i<$id; $i++){
+            if($id==1){
+
+                $html=$html. '
+                       <input name="Valuename'.$i.'" type="hidden" value="null">
+                        ';
+            }
+            else{
+                $html=$html. '
+                        <div class="form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12" >Detail Name<span class="required">*</span>
+                            </label>
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                <input name="Valuename'.$i.'"
+                                           class="form-control col-lg-12 col-md-12 col-sm-12 col-xs-12"
+                                           type = "text"
+                                           required=""
+                                    />
+                            </div>
+                        </div>
+                        ';
+            }
+        }
+        return json_encode($html);
+
     }
 }

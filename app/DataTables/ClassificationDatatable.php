@@ -5,6 +5,7 @@ namespace App\DataTables;
 use App\Model\Classification;
 //use App\Classification;
 use Yajra\DataTables\Services\DataTable;
+//use SnappyDataTableTrait;
 
 class ClassificationDatatable extends DataTable
 {
@@ -50,7 +51,7 @@ class ClassificationDatatable extends DataTable
         return $this->builder()
                     ->columns($this->getColumns())
                     ->minifiedAjax()
-                    ->addAction(['width' => '180px'])
+                    ->addAction(['width' => '180px','printable' => false])
                     ->parameters($this->getBuilderParameters());
     }
 

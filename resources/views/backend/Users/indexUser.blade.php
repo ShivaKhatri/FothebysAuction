@@ -4,13 +4,22 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.4.2/css/buttons.dataTables.min.css">
     @endsection
 @section('content')
-    <div class="card">
-        <div class="card-header">
-            Index User
-        </div>
-        <div class="card-body">
-            <h5 class="card-title">Table</h5>
-            {!! $dataTable->table(['class' => 'table table-striped ']) !!}
+    <nav class="breadcrumb">
+        <a class="breadcrumb-item" href="{{route('home')}}">Home</a>
+        <span class="breadcrumb-item active">Users</span>
+    </nav>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">{{ __(' Users Details') }}</div>
+
+                    <div class="card-body">
+                        {!! $dataTable->table(['class' => 'table table-striped ']) !!}
+                    </div>
+                    <!-- /.box-body -->
+                </div>
+            </div>
         </div>
     </div>
 @endsection

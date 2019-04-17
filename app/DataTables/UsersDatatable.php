@@ -18,8 +18,23 @@ class UsersDatatable extends DataTable
     {
         return datatables($query)
             ->addColumn('action', function ($users) {
-                return '<a href="'.route('users.edit',$users->id).'" class="btn btn-sm btn-primary" style="margin:3px"><i
-                                                    class="glyphicon glyphicon-edit"></i> Edit</a></a>&nbsp;&nbsp;<a href="'.route('users.destroy',$users->id).'" class="btn btn-sm btn-danger"><i class="glyphicon glyphicon-remove"></i> Delete</a>';
+                $verify=User::find($users->id)->Astatus;
+                if($verify=="verified") {
+                    return '<a href="'.route('users.show',$users->id).'" class="btn btn-sm btn-success" id="show" ><i class="glyphicon glyphicon-eye"></i> Show</a>
+                        <a href="' . route('users.edit', $users->id) . '" class="btn btn-sm btn-primary" style="margin:3px"><i
+                                                    class="glyphicon glyphicon-edit"></i> Edit</a></a>&nbsp;&nbsp;<a href="' . route('users.destroy', $users->id) . '" class="btn btn-sm btn-danger"><i class="glyphicon glyphicon-remove"></i> Delete</a>';
+                }
+                else{
+                    return '<a href="' . route('users.verify', $users->id) . '" class="btn btn-sm btn-success" style="margin:3px"><i
+                                                    class="glyphicon glyphicon-successt"></i> Verify</a><a href="' . route('users.edit', $users->id) . '" class="btn btn-sm btn-primary" style="margin:3px"><i
+                                                    class="glyphicon glyphicon-edit"></i> Edit</a></a>&nbsp;&nbsp;<a href="' . route('users.destroy', $users->id) . '" class="btn btn-sm btn-danger"><i class="glyphicon glyphicon-remove"></i> Delete</a>';
+
+                }
+            })
+            ->addColumn('User_Type', function ($users) {
+                $user=User::find($users->id);
+                $type=$user->Cstatus;
+                return $type;
             })
             ->filterColumn('name', function ($query, $keyword) {
 
@@ -51,7 +66,7 @@ class UsersDatatable extends DataTable
         return $this->builder()
                     ->columns($this->getColumns())
                     ->minifiedAjax()
-                    ->addAction(['width' => '130px'])
+                    ->addAction(['width' => '180px'])
                     ->parameters($this->getBuilderParameters());
     }
 
@@ -65,6 +80,7 @@ class UsersDatatable extends DataTable
         return [
             'id',
             'name',
+            'User_Type',
             'email',
             'phone_no',
         ];

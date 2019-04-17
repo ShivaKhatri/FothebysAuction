@@ -3,7 +3,6 @@
 namespace App\DataTables;
 
 use App\Model\Detail;
-use App\User;
 use Yajra\DataTables\Services\DataTable;
 
 class DetailDatatable extends DataTable
@@ -27,11 +26,36 @@ class DetailDatatable extends DataTable
                 $wow='<b>'.$admin->name.'</b>';
                 return $wow;
             })
+            ->addColumn('Values', function ($detail) {
+                $value=Detail::find($detail->id)->detailValue()->get();
+                $Dname=Detail::find($detail->id);
+                $count=count($value);
+                $wow='<ol>';
+                foreach($value as $get){
+                    if($get->name=="null"){
+                        $wow=$wow.'<li>'.$Dname->name.'</li>';
+
+                    }
+                    else{
+                        $wow=$wow.'<li>'.$get->name.'</li>';
+
+                    }
+
+                }
+                $wow=$wow.'</ol>';
+//                dd($sec);
+                if($count==0){
+                    $wow='<b>No Values Assigned</b>';
+                    return $wow;
+                }
+//                dd($wow);
+                return $wow;
+            })
             ->addColumn('action', function ($detail) {
                 return '<a href="'.route('detail.edit',$detail->id).'" class="btn btn-sm btn-primary" style="margin:3px">
                         <i class="glyphicon glyphicon-edit"></i> Edit</a>&nbsp;&nbsp;<a href="'.route('detail.destroy',$detail->id).'" class="btn btn-sm btn-danger" id="delete" ><i class="glyphicon glyphicon-remove"></i> Delete</a>';
             })
-            ->rawColumns(['Added_By','category', 'action']);
+            ->rawColumns(['Added_By','category', 'Values','action']);
     }
 
     /**
@@ -42,7 +66,7 @@ class DetailDatatable extends DataTable
      */
     public function query(Detail $model)
     {
-        return $model->newQuery()->select('id', 'name', 'description',  'created_at', 'updated_at');
+        return $model->newQuery()->select('id', 'name', 'description',  'created_at');
     }
 
     /**
@@ -72,8 +96,8 @@ class DetailDatatable extends DataTable
             'description',
             'Added_By',
             'category',
-            'created_at',
-            'updated_at'
+            'Values',
+            'created_at'
         ];
     }
 

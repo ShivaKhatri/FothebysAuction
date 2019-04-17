@@ -36,7 +36,8 @@ class UnVerifiedDatatable extends DataTable
             })
 
             ->addColumn('action', function ($user) {
-                return '<a href="'.route('users.edit',$user->id).'" class="btn btn-sm btn-primary" style="margin:3px"><i
+                return '<a href="'.route('users.show',$user->id).'" class="btn btn-sm btn-success" id="show" ><i class="glyphicon glyphicon-eye"></i> Show</a>
+                        <a href="'.route('users.edit',$user->id).'" class="btn btn-sm btn-primary" style="margin:3px"><i
                                                     class="glyphicon glyphicon-edit"></i> Edit</a></a>&nbsp;&nbsp;<a href="'.route('users.destroy',$user->id).'" class="btn btn-sm btn-danger" id="delete" ><i class="glyphicon glyphicon-remove"></i> Delete</a>';
             })
 
@@ -73,7 +74,7 @@ class UnVerifiedDatatable extends DataTable
                     ->columns($this->getColumns())
                     ->minifiedAjax()
                     ->addAction(['width' => '120px'])
-                    ->parameters($this->getBuilderParameters());
+                    ->parameters($this->getShowParameters());
     }
 
     /**

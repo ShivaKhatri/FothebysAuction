@@ -15,24 +15,32 @@ class CreateItemsTable extends Migration
     {
         Schema::create('items', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('nameArtist');
+            $table->string('artists');//customer
             $table->string('Piece_Title');
-            $table->integer('lotNumber');
-            $table->integer('year');
+            $table->integer('lotNumber')->nullable();//admin
+            $table->string('lotReferenceNumber');
+            $table->integer('from');
+            $table->integer('to')->nullable();
             $table->integer('classification_id');
+            $table->integer('auction_id')->nullable();//admin
             $table->integer('category_id');
+            $table->integer('subCategory_id')->nullable();
             $table->text('description')->nullable();
-            $table->date('auction_date');
-            $table->integer('estimated_price_from');
-            $table->integer('estimated_price_to');
-            $table->integer('reserved_price')->nullable();
+            $table->integer('estimated_price_from')->nullable();//admin
+            $table->integer('estimated_price_to')->nullable();//admin
+            $table->integer('reservePrice')->nullable();
             $table->integer('client_id')->nullable();
-            $table->tinyInteger('authenticated');
+            $table->string('authenticated')->nullable();//admin
             $table->string('provenance_details');
             $table->string('customer_agreement');
-            $table->integer('expert_id')->nullable();
-            $table->text('additional_notes')->nullable();
-            $table->date('signed_date')->nullable();
+            $table->integer('expert_id')->nullable();//admin
+            $table->string('expert_name')->nullable();//admin
+            $table->string('lastNumber')->nullable();//admin
+            $table->string('approved')->nullable();//admin
+            $table->text('additional_notes')->nullable();//admin
+            $table->date('signed_date')->nullable();//admin
+            $table->string('sold')->nullable();//admin
+            $table->integer('sold_to_id')->nullable();//admin
             $table->timestamps();
         });
     }

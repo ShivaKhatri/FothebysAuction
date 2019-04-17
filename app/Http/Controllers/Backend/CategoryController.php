@@ -24,7 +24,15 @@ class CategoryController extends Controller
     public function index(CategoryDatatable $dataTable)
 
     {
+        if(Auth::user()->Cstatus=="Admin")//{{Cstatus = User Type: Admin, Buyer, Seller, A customer who buys and sells item in fothebys as "Both" )
+            // When a user  tries to access this view the Cstatus of the user will  be checked
+        {
             return $dataTable->render('backend.Category.indexCategory');
+
+        }
+        else//if the user isnt either of the above the they are redirected to home page--}}
+            return redirect('/redirect');
+
 
 
     }
@@ -36,7 +44,11 @@ class CategoryController extends Controller
      */
     public function create()
     {
+        $Cstatus=Auth::user()->Cstatus;
+        if($Cstatus=="Admin")
             return view('backend.Category.createCategory');
+        else
+            return redirect('/redirect');
     }
 
     /**
@@ -74,8 +86,14 @@ class CategoryController extends Controller
      */
     public function edit($id)
     {
-        $category=Category::find($id);
-        return view('backend.Category.editCategory')->with('category',$category);
+        $Cstatus=Auth::user()->Cstatus;
+        if($Cstatus=="Admin") {
+            $category = Category::find($id);
+            return view('backend.Category.editCategory')->with('category', $category);
+        }
+        else
+            return redirect('/redirect');
+
     }
 
     /**
@@ -108,16 +126,22 @@ class CategoryController extends Controller
     public function destroy($id)
     {
 //        dd('here');
-        if (!$this->checkId($id)) {
+        $Cstatus=Auth::user()->Cstatus;
+        if($Cstatus=="Admin") {
+            if (!$this->checkId($id)) {
+                return response()->json([
+                    'success' => 'Record not deleted!'
+                ]);
+            }
+
+            Category::destroy($id);
             return response()->json([
-                'success' => 'Record not deleted!'
+                'success' => 'Record deleted successfully!'
             ]);
         }
+        else
+            return redirect('/redirect');
 
-        Category::destroy($id);
-        return response()->json([
-            'success' => 'Record deleted successfully!'
-        ]);
     }
 
     public function checkId($id)

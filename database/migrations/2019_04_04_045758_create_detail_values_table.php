@@ -17,8 +17,8 @@ class CreateDetailValuesTable extends Migration
             $table->bigIncrements('id');
             $table->string('name');
             $table->string('type');
-            $table->string('description')->nullable();
             $table->integer('admin_id');
+            $table->integer('detail_id');
             $table->timestamps();
         });
     }

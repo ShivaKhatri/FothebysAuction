@@ -2,7 +2,12 @@
 
 namespace App\Http\Controllers\Backend;
 
+use App\DataTables\AdminDatatable;
+use App\DataTables\BothDatatable;
+use App\DataTables\BuyerDatatable;
+use App\DataTables\CustomerDatatable;
 use App\DataTables\pendingDatatable;
+use App\DataTables\SellersDatatable;
 use App\DataTables\UnVerifiedDatatable;
 use App\DataTables\UsersDatatable;
 use App\DataTables\verifiedUsersDatatable;
@@ -10,8 +15,6 @@ use App\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
-use Yajra\DataTables\DataTables;
 class RegisterController extends Controller
 {
     /**
@@ -23,9 +26,74 @@ class RegisterController extends Controller
 
     {
 //        dd(Auth::user()->Cstatus);
+        if(Auth::user()->Cstatus=="Admin")
             return $user->render('backend.Users.indexUser');
+        else
+            return redirect('/redirect');
 
     }
+
+
+    public function buyer(BuyerDatatable $user)
+
+    {
+        if(Auth::user()->Cstatus=="Admin")
+            return $user->render('backend.Users.indexUser');
+
+        else
+            return redirect('/redirect');
+
+    }
+    public function seller(SellersDatatable $user)
+
+    {
+        if(Auth::user()->Cstatus=="Admin")
+            return $user->render('backend.Users.indexUser');
+
+
+        else
+            return redirect('/redirect');
+
+
+    }
+    public function both(BothDatatable $user)
+
+    {
+        if(Auth::user()->Cstatus=="Admin")
+            return $user->render('backend.Users.indexUser');
+
+
+        else
+            return redirect('/redirect');
+
+
+    }
+    public function customer(CustomerDatatable $user)
+
+    {
+        if(Auth::user()->Cstatus=="Admin")
+            return $user->render('backend.Users.indexUser');
+
+
+        else
+            return redirect('/redirect');
+
+
+    }
+    public function admin(AdminDatatable $user)
+
+    {
+        if(Auth::user()->Cstatus=="Admin")
+            return $user->render('backend.Users.indexUser');
+
+
+        else
+            return redirect('/redirect');
+
+
+
+    }
+
 
     /**
      * Show the form for creating a new resource.
@@ -34,7 +102,14 @@ class RegisterController extends Controller
      */
     public function create()
     {
-        return view('backend.Users.registerUser');
+        if(Auth::user()->Cstatus=="Admin")
+            return view('backend.Users.registerUser');
+
+
+        else
+            return redirect('/redirect');
+
+
 
     }
 
@@ -90,10 +165,17 @@ class RegisterController extends Controller
      */
     public function show($id)
     {
-        $user=User::find($id);
-        $verified_by=User::find($user->verified_by);
-        $sort = str_split($user->bank_sort_no,2);
-        return view('backend.Users.viewUser')->with('user',$user)->with('verified_by',$verified_by)->with('sort',$sort);
+        if(Auth::user()->Cstatus=="Admin"||Auth::user()->Cstatus=="Seller"||Auth::user()->Cstatus=="Buyer"||Auth::user()->Cstatus=="Both") {
+            $user = User::find($id);
+            $verified_by = User::find($user->verified_by);
+            $sort = str_split($user->bank_sort_no, 2);
+            return view('backend.Users.viewUser')->with('user', $user)->with('verified_by', $verified_by)->with('sort', $sort);
+        }
+        else
+            return redirect('/redirect');
+
+
+
     }
 
     /**
@@ -104,8 +186,15 @@ class RegisterController extends Controller
      */
     public function edit($id)
     {
-        $user=User::find($id);
-        return view('backend.Users.editUser')->with('user',$user);
+        if(Auth::user()->Cstatus=="Admin"||Auth::user()->Cstatus=="Seller"||Auth::user()->Cstatus=="Buyer"||Auth::user()->Cstatus=="Both") {
+
+            $user=User::find($id);
+            return view('backend.Users.editUser')->with('user',$user);
+        }
+        else
+            return redirect('/redirect');
+
+
     }
 
     /**
@@ -164,6 +253,25 @@ class RegisterController extends Controller
         return redirect('users');
 
     }
+    public function verify($id)
+    {
+
+        if(Auth::user()->Cstatus=="Admin") {
+
+            $user=User::find($id);
+            $user->update([
+                'Astatus'=>'verified',
+                'verified_by'=>Auth::user()->id,
+            ]);
+
+            return redirect('users');
+        }
+        else
+            return redirect('/redirect');
+
+
+
+    }
 
     /**
      * Remove the specified resource from storage.
@@ -173,13 +281,19 @@ class RegisterController extends Controller
      */
     public function destroy($id)
     {
-        if (!$this->checkId($id)) {
+        if(Auth::user()->Cstatus=="Admin") {
+
+            if (!$this->checkId($id)) {
+                return redirect()->route('users.index');
+            }
+
+            User::destroy($id);
+
             return redirect()->route('users.index');
         }
+        else
+            return redirect('/redirect');
 
-        User::destroy($id);
-
-        return redirect()->route('users.index');
     }
 
     public function checkId($id)
@@ -193,16 +307,37 @@ class RegisterController extends Controller
 
     public function verified(verifiedUsersDatatable $verified){
 
-        return $verified->render('backend.verifiedUsers.verifiedUsers');
+        if(Auth::user()->Cstatus=="Admin") {
+
+            return $verified->render('backend.Users.indexUser');
+
+        }
+        else
+            return redirect('/redirect');
+
 
     }
     public function unVerified(UnVerifiedDatatable $unverified){
-        return $unverified->render('backend.unVerifiedUsers.unVerifiedUsers');
+
+        if(Auth::user()->Cstatus=="Admin") {
+
+            return $unverified->render('backend.Users.indexUser');
+
+        }
+        else
+            return redirect('/redirect');
+
 
     }
     public function pending(pendingDatatable $user){
 
-        return $user->render('backend.pendingUsers.pending');
+        if(Auth::user()->Cstatus=="Admin") {
+
+            return $user->render('backend.Users.indexUser');
+
+        }
+        else
+            return redirect('/redirect');
 
     }
 }

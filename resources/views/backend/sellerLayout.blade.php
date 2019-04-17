@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Fothebys Auction| Dashboard</title>
+    <title>Fothebys Auction</title>
     <!-- Tell the browser to be responsive to screen width -->
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <!-- Scripts -->
@@ -37,7 +37,7 @@
 
 <body>
 <nav class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0">
-    <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="#">Company name</a>
+    <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="#">Fothebys Auction</a>
     {{--<input class="form-control form-control-dark w-100" type="text" placeholder="Search" aria-label="Search">--}}
     <ul class="navbar-nav px-3">
         <li class="nav-item text-nowrap">
@@ -61,27 +61,15 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{route('category.index')}}">
-                            <span data-feather="shopping-cart"></span>
-                            Category
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">
+                        <a class="nav-link" href="{{route('item.create')}}">
                             <span data-feather="users"></span>
-                            Items
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">
-                            <span data-feather="bar-chart-2"></span>
-                            Commission Bids
+                            Sell Items
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#">
                             <span data-feather="file"></span>
-                            Auction
+                            Profile
                         </a>
                     </li>
                     <li class="nav-item">

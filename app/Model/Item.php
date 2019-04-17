@@ -7,21 +7,30 @@ use Illuminate\Database\Eloquent\Model;
 class Item extends Model
 {
     protected $fillable = [
-        'nameArtist',
+        'artists',
         'Piece_Title',
         'lotReferenceNumber',
-        'year',
+        'lotNumber',
+        'from',
+        'to',
         'classification_id',
         'category_id',
+        'subCategory_id',
         'description',
         'estimated_price_from',
         'estimated_price_to',
-        'reserved_price',
+        'sold_to_id',
+        'sold',
+        'reservePrice',
         'client_id',
         'authenticated',
         'provenance_details',
         'customer_agreement',
         'expert_id',
+        'auction_id',
+        'approved',
+        'expert_name',
+        'lastNumber',
         'additional_notes',
         'signed_date'
     ];
@@ -33,16 +42,32 @@ class Item extends Model
     {
         return $this->belongsTo('App\Model\Category','category_id');
     }
+    public function subCategory()
+    {
+        return $this->belongsTo('App\Model\SubCategory','category_id');
+    }
     public function classification()
     {
         return $this->belongsTo('App\Model\Classification','classification_id');
+    }
+    public function detailValue()
+    {
+        return $this->belongsToMany('App\Model\Detail_value','detail_item_value','item_id','detail_value_id');
     }
     public function client()
     {
         return $this->belongsTo('App\User','client_id');
     }
+    public function auction()
+    {
+        return $this->belongsTo('App\Model\Auction','auction_id');
+    }
     public function image()
     {
         return $this->hasMany('App\Model\Image','item_id');
+    }
+    public function bid()
+    {
+        return $this->hasMany('App\Model\Commission_Bid','item_id');
     }
 }

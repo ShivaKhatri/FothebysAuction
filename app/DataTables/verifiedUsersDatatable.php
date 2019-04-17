@@ -21,6 +21,11 @@ class verifiedUsersDatatable extends DataTable
                 $get=User::find($user->id);
 
                 $admin=User::find($get->added_by);
+                if($admin==null){
+                    $wow='<b> Added by super admin</b>';
+
+                }
+                else
                 $wow='<b>'.$admin->FirstName.' '.$admin->Surname.'</b>';
 
                 return $wow;
@@ -30,6 +35,11 @@ class verifiedUsersDatatable extends DataTable
                 $get=User::find($user->id);
 
                 $admin=User::find($get->verified_by);
+                if($admin==null){
+                    $wow='<b> Verified by super admin</b>';
+
+                }
+                else
                 $wow='<b>'.$admin->FirstName.' '.$admin->Surname.'</b>';
 
                 return $wow;
@@ -72,8 +82,8 @@ class verifiedUsersDatatable extends DataTable
         return $this->builder()
                     ->columns($this->getColumns())
                     ->minifiedAjax()
-                    ->addAction(['width' => '20%'])
-                    ->parameters($this->getBuilderParameters());
+                    ->addAction(['width' => '25%'])
+                    ->parameters($this->getShowParameters());
     }
 
     /**

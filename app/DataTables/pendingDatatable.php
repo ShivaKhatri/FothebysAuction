@@ -27,17 +27,23 @@ class pendingDatatable extends DataTable
             })
 
                 ->addColumn('action', function ($user) {
-                return '<a href="'.route('users.edit',$user->id).'" class="btn btn-sm btn-primary" style="margin:3px"><i
+                return '<a href="'.route('users.show',$user->id).'" class="btn btn-sm btn-success" id="show" ><i class="glyphicon glyphicon-eye"></i> Show</a>
+                        <a href="' . route('users.verify', $user->id) . '" class="btn btn-sm btn-success" style="margin:3px"><i
+                                                    class="glyphicon glyphicon-successt"></i> Verify</a><a href="'.route('users.edit',$user->id).'" class="btn btn-sm btn-primary" style="margin:3px"><i
                                                     class="glyphicon glyphicon-edit"></i> Edit</a></a>&nbsp;&nbsp;<a href="'.route('users.destroy',$user->id).'" class="btn btn-sm btn-danger" id="delete" ><i class="glyphicon glyphicon-remove"></i> Delete</a>';
             })
-
+            ->addColumn('User_Type', function ($users) {
+                $user=User::find($users->id);
+                $type=$user->Cstatus;
+                return $type;
+            })
             ->filterColumn('name', function ($query, $keyword) {
 
                 $keywords = trim($keyword);
                 $query->whereRaw("CONCAT(FirstName, Surname) like ?", ["%{$keywords}%"]);
 
             })
-            ->rawColumns(['Added_By', 'action']);
+            ->rawColumns(['Added_By','User_Type', 'action']);
     }
 
     /**
@@ -48,7 +54,7 @@ class pendingDatatable extends DataTable
      */
     public function query(User $model)
     {
-        return $model->newQuery()->select('id',DB::raw('CONCAT(FirstName," ", Surname ) AS name') ,'email', 'phone_no', 'Added_By', 'created_at', 'updated_at')->where('Astatus','=','review');
+        return $model->newQuery()->select('id',DB::raw('CONCAT(FirstName," ", Surname ) AS name') ,'email', 'phone_no', 'Added_By')->where('Astatus','=','review');
     }
 
     /**
@@ -61,8 +67,8 @@ class pendingDatatable extends DataTable
         return $this->builder()
                     ->columns($this->getColumns())
                     ->minifiedAjax()
-                    ->addAction(['width' => '120px'])
-                    ->parameters($this->getBuilderParameters());
+                    ->addAction(['width' => '28%'])
+                    ->parameters($this->getShowParameters());
     }
 
     /**
@@ -77,9 +83,8 @@ class pendingDatatable extends DataTable
             'name',
             'email',
             'phone_no',
-            'Added_By',
-            'created_at',
-            'updated_at'
+            'User_Type',
+            'Added_By'
         ];
     }
 

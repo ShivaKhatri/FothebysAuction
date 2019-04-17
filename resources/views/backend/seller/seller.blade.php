@@ -1,6 +1,11 @@
 @extends('backend.layout')
 
 @section('content')
+    <nav class="breadcrumb">
+        <a class="breadcrumb-item" href="{{route('home')}}">Home</a>
+        <a class="breadcrumb-item" href="{{route('users.index')}}">Users</a>
+        <span class="breadcrumb-item active"> Sellers</span>
+    </nav>
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-12">

@@ -1,6 +1,10 @@
 @extends('backend.layout')
 
 @section('content')
+    <nav class="breadcrumb">
+        <a class="breadcrumb-item" href="{{route('home')}}">Home</a>
+        <span class="breadcrumb-item active">Categories</span>
+    </nav>
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-12">
@@ -14,9 +18,14 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-1 col-sm-1 col-xs-1" >
-            <a href="{{route('detail.create')}}" class="btn btn-sm btn-primary" style="margin:3px"><i
-                        class="glyphicon glyphicon-plus"></i> Additional Details</a>
+        <div class="row" style="margin-top: 10px">
+            <div class="col-md-5 col-sm-5 col-xs-5" >
+                <p>Add additional details of a category by clicking here:-></p>
+            </div>
+            <div class="col-md-1 col-sm-1 col-xs-1" >
+                <a href="{{route('detail.create')}}" class="btn btn-sm btn-primary" style="margin:3px"><i
+                            class="glyphicon glyphicon-plus"></i> Additional Details</a>
+            </div>
         </div>
     </div>
 

@@ -66,5 +66,15 @@ return [
             'reset',
             'reload',
         ],
+        ],
+        'show' => [
+        'dom'     => 'Bfrtip',
+        'order'   => [[0, 'desc']],
+        'buttons' => [
+            'export',
+            'print',
+            'reset',
+            'reload',
+        ],
     ],
 ];
