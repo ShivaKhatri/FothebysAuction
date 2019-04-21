@@ -1,5 +1,5 @@
 
-@extends('backend.layout'){{--Backend layout for Admin(Fothebays staff--}}
+@extends('backend.buyerLayout'){{--Backend layout for Admin(Fothebays staff--}}
 
 @section('content')
     {{--<div class="row">--}}

@@ -17,7 +17,16 @@ class ClassificationController extends Controller
      */
     public function index(ClassificationDatatable $dataTable)
     {
-        return $dataTable->render('backend.Classification.indexClassification');
+        if(Auth::user()->Cstatus=="Admin")//{{Cstatus = User Type: Admin, Buyer, Seller, A customer who buys and sells item in fothebys as "Both" )
+            // When a user  tries to access this view the Cstatus of the user will  be checked
+        {
+            return $dataTable->render('backend.Classification.indexClassification');
+
+        }
+        else//if the user isnt either of the above the they are redirected to home page--}}
+            return redirect('/redirect');
+
+
     }
 
     /**
@@ -27,7 +36,16 @@ class ClassificationController extends Controller
      */
     public function create()
     {
-        return view('backend.Classification.createClassification');
+
+        if(Auth::user()->Cstatus=="Admin")//{{Cstatus = User Type: Admin, Buyer, Seller, A customer who buys and sells item in fothebys as "Both" )
+            // When a user  tries to access this view the Cstatus of the user will  be checked
+        {
+            return view('backend.Classification.createClassification');
+
+        }
+        else//if the user isnt either of the above the they are redirected to home page--}}
+            return redirect('/redirect');
+
     }
 
     /**
@@ -65,8 +83,15 @@ class ClassificationController extends Controller
      */
     public function edit($id)
     {
-        $classification=Classification::find($id);
-        return view('backend.Classification.editClassification')->with('classification',$classification);
+        if(Auth::user()->Cstatus=="Admin")//{{Cstatus = User Type: Admin, Buyer, Seller, A customer who buys and sells item in fothebys as "Both" )
+            // When a user  tries to access this view the Cstatus of the user will  be checked
+        {
+            $classification=Classification::find($id);
+            return view('backend.Classification.editClassification')->with('classification',$classification);
+        }
+        else//if the user isnt either of the above the they are redirected to home page--}}
+            return redirect('/redirect');
+
     }
 
     /**

@@ -22,7 +22,8 @@ class BuyerController extends Controller
     public function index(BuyerDatatable $buyer)
     {
         if(Auth::user()) {
-            if (Auth::user()->Cstatus == 'Admin') {
+            if (Auth::user()->Cstatus == 'Admin') {//{{Cstatus = User Type: Admin, Buyer, Seller, A customer who buys and sells item in fothebys as "Both" )
+                // When a user  tries to access this view the Cstatus of the user will  be checked
                 return $buyer->render('backend.buyer.indexBuyer');
             }
         }

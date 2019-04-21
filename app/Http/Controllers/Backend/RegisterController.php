@@ -14,7 +14,10 @@ use App\DataTables\verifiedUsersDatatable;
 use App\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Mail\Mailable;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
+
 class RegisterController extends Controller
 {
     /**
@@ -165,12 +168,29 @@ class RegisterController extends Controller
      */
     public function show($id)
     {
-        if(Auth::user()->Cstatus=="Admin"||Auth::user()->Cstatus=="Seller"||Auth::user()->Cstatus=="Buyer"||Auth::user()->Cstatus=="Both") {
             $user = User::find($id);
             $verified_by = User::find($user->verified_by);
             $sort = str_split($user->bank_sort_no, 2);
-            return view('backend.Users.viewUser')->with('user', $user)->with('verified_by', $verified_by)->with('sort', $sort);
-        }
+            if(Auth::user()->Cstatus=="Admin"){
+                return view('backend.Users.viewUser')->with('user', $user)->with('verified_by', $verified_by)->with('sort', $sort)->with('layout', 'layout');
+
+            }
+
+                elseif(Auth::user()->Cstatus=="Seller"){
+                    return view('backend.Users.viewUser')->with('user', $user)->with('verified_by', $verified_by)->with('sort', $sort)->with('layout', 'sellerLayout');
+
+                }
+
+                elseif(Auth::user()->Cstatus=="Buyer"){
+                    return view('backend.Users.viewUser')->with('user', $user)->with('verified_by', $verified_by)->with('sort', $sort)->with('layout', 'buyerLayout');
+
+                }
+
+                elseif(Auth::user()->Cstatus=="Both"){
+                    return view('backend.Users.viewUser')->with('user', $user)->with('verified_by', $verified_by)->with('sort', $sort)->with('layout', 'bothLayout');
+
+                }
+
         else
             return redirect('/redirect');
 
@@ -263,7 +283,24 @@ class RegisterController extends Controller
                 'Astatus'=>'verified',
                 'verified_by'=>Auth::user()->id,
             ]);
+                $name = $user->FirstName;
+                $email = $user->email;
 
+                $body =
+
+                    "Dear " . $user->FirstName . ",
+                        
+                        We are pleased to inform you have been verified and registered to our system, now you can use our system with ease   
+                        Mr M Fotherby
+                        ";
+
+                $data = array('name' => $name, "body" => $body);
+
+                Mail::send('backend.mail.mail', $data, function ($message) use ($name, $email) {
+                    $message->from('shivakhatri665@gmail.com', 'Shiva');
+
+                    $message->to($email, $name)->subject('User Verification');
+                });
             return redirect('users');
         }
         else

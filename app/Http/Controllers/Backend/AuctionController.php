@@ -22,8 +22,8 @@ class AuctionController extends Controller
      */
     public function index(AuctionDatatable $datatable)
     {
-        $Cstatus=Auth::user()->Cstatus;
-        if($Cstatus=="Admin")
+        if(Auth::user()->Cstatus=="Admin")//{{Cstatus = User Type: Admin, Buyer, Seller, A customer who buys and sells item in fothebys as "Both" )
+            // When a user  tries to access this view the Cstatus of the user will  be checked
         return $datatable->render('backend.Auction.indexAuction');
         else
             return redirect('/redirect');
@@ -37,7 +37,8 @@ class AuctionController extends Controller
      */
     public function create()
     {
-        $Cstatus=Auth::user()->Cstatus;
+        $Cstatus=Auth::user()->Cstatus;//{{Cstatus = User Type: Admin, Buyer, Seller, A customer who buys and sells item in fothebys as "Both" )
+        // When a user  tries to access this view the Cstatus of the user will  be checked
         if($Cstatus=="Admin") {
             $category = Category::all()->pluck('name', 'id');
             return view('backend.Auction.createAuction')->with('category', $category);
@@ -176,38 +177,46 @@ class AuctionController extends Controller
      */
     public function edit($id)
     {
+        if(Auth::user()->Cstatus=="Admin"){//{{Cstatus = User Type: Admin, Buyer, Seller, A customer who buys and sells item in fothebys as "Both" )
+            // When a user  tries to access this view the Cstatus of the user will  be checked
+            $category=Category::all()->pluck('name','id');
+            $auction=Auction::find($id);
+            return view('backend.Auction.editAuction')->with('category',$category)->with('auction',$auction);
+        }
+        else
+            return redirect('/redirect');
 
-        $category=Category::all()->pluck('name','id');
-        $auction=Auction::find($id);
-        return view('backend.Auction.editAuction')->with('category',$category)->with('auction',$auction);
+
 
     }
 
     public function publish($id)
     {
 
-        $auction=Auction::find($id);
-        $count=Item::query()->where('auction_id','=',$id)->count();
+        if(Auth::user()->Cstatus=="Admin"){//{{Cstatus = User Type: Admin, Buyer, Seller, A customer who buys and sells item in fothebys as "Both" )
+            // When a user  tries to access this view the Cstatus of the user will  be checked
+            $auction=Auction::find($id);
+            $count=Item::query()->where('auction_id','=',$id)->count();
 
-        if($auction->themeName=="artists")
-        {
-            if($count>10){
-                $message="This Auction Contains Enough Item To Be Auctioned";
-            }
-            else{
-                $message="This Auction Still Needs More Items To Publish";
+            if($auction->themeName=="artists")
+            {
+                if($count>10){
+                    $message="This Auction Contains Enough Item To Be Auctioned";
+                }
+                else{
+                    $message="This Auction Still Needs More Items To Publish";
 
-            }
-            //selects items which is verified and whose artists name matches with the given value($id)
-            $item = Item::query()->where('artists' , 'LIKE', "%{ $auction->themeValue}%" )->where('approved', '=', 'allowed')->get();
+                }
+                //selects items which is verified and whose artists name matches with the given value($id)
+                $item = Item::query()->where('artists' , 'LIKE', "%{ $auction->themeValue}%" )->where('approved', '=', 'allowed')->get();
 
-            //saving the html codes to be displayed in view here. this is the initialization of the variable $html.
-            $html=' <label for="type" class="control-label col-md-12 col-sm-12 col-xs-12" ><h6>Select Items For Auction</h6></label><div class="col-lg-10 col-md-10 col-sm-10 col-xs-12 d-flex justify-content-between row">
+                //saving the html codes to be displayed in view here. this is the initialization of the variable $html.
+                $html=' <label for="type" class="control-label col-md-12 col-sm-12 col-xs-12" ><h6>Select Items For Auction</h6></label><div class="col-lg-10 col-md-10 col-sm-10 col-xs-12 d-flex justify-content-between row">
 ';
-            foreach ($item as $get){
+                foreach ($item as $get){
 
 //            $html=$html. '<input type="checkbox" name="item'.$get->id.'" value="'.$get->id.'"><a href="'.route("item.show",$get->id).'"> Lot Reference Number:'.$get->lotReferenceNumber.' '.$get->Piece_Title.'</a></input>';
-                $html= $html.'<div class="col-md-4 col-sm-4 col-xs-12" style="margin-top: 5px"><div class="card">
+                    $html= $html.'<div class="col-md-4 col-sm-4 col-xs-12" style="margin-top: 5px"><div class="card">
                   <div class="card-header ">
                           <input type="checkbox" class="form-control" name="item'.$get->id.'" value="'.$get->id.'">
                   </div>
@@ -216,44 +225,47 @@ class AuctionController extends Controller
                     <a href="'.route("item.show",$get->id).'" class="btn btn-primary">View Item</a>
                   </div>&nbsp;&nbsp;
 </div></div>';
-            }
-            $html=$html.'</div>';
-        }
-        if($auction->themeName=="Category"){
-            if($count>80){
-                $message="This Auction Contains Enough Item To Be Auctioned";
-            }
-            else{
-                $message="This Auction Still Needs More Items To Publish";
-
-            }
-            $item = Item::all()->where('category_id', '=', $auction->themeValue)->where('approved', '=', 'allowed')->where('auction_id', '=', null);
-            $html=' <label for="type" class="control-label col-md-12 col-sm-12 col-xs-12" ><h6>Select Items For Auction</h6></label><div class="col-lg-10 col-md-10 col-sm-10 col-xs-12 d-flex justify-content-between row">
-';
-            $i=0;
-            foreach ($item as $get){
-                $i=$i+1;
-
-//            $html=$html. '<input type="checkbox" name="item'.$get->id.'" value="'.$get->id.'"><a href="'.route("item.show",$get->id).'"> Lot Reference Number:'.$get->lotReferenceNumber.' '.$get->Piece_Title.'</a></input>';
-                $html= $html.'<div class="col-md-4 col-sm-4 col-xs-12" style="margin-top: 5px"><div class="card">
-                  <div class="card-header ">
-                          <input type="checkbox" class="form-control" name="item'.$get->id.'" value="'.$get->id.'">
-                  </div>
-                  <div class="card-body">
-                    <p class="card-text"> Piece Title:'. $get->Piece_Title.'<br>Lot Reference Number: '. $get->lotReferenceNumber.'<br>Artist: '.$get->artists.'</p>
-                    <a href="'.route("item.show",$get->id).'" class="btn btn-primary">View Item</a>
-                  </div>&nbsp;&nbsp;
-</div></div>';
-            }
-            if($i==0){
-                $html=null;
-
-            }
-            else
+                }
                 $html=$html.'</div>';
+            }
+            if($auction->themeName=="Category"){
+                if($count>80){
+                    $message="This Auction Contains Enough Item To Be Auctioned";
+                }
+                else{
+                    $message="This Auction Still Needs More Items To Publish";
+
+                }
+                $item = Item::all()->where('category_id', '=', $auction->themeValue)->where('approved', '=', 'allowed')->where('auction_id', '=', null);
+                $html=' <label for="type" class="control-label col-md-12 col-sm-12 col-xs-12" ><h6>Select Items For Auction</h6></label><div class="col-lg-10 col-md-10 col-sm-10 col-xs-12 d-flex justify-content-between row">
+';
+                $i=0;
+                foreach ($item as $get){
+                    $i=$i+1;
+
+//            $html=$html. '<input type="checkbox" name="item'.$get->id.'" value="'.$get->id.'"><a href="'.route("item.show",$get->id).'"> Lot Reference Number:'.$get->lotReferenceNumber.' '.$get->Piece_Title.'</a></input>';
+                    $html= $html.'<div class="col-md-4 col-sm-4 col-xs-12" style="margin-top: 5px"><div class="card">
+                  <div class="card-header ">
+                          <input type="checkbox" class="form-control" name="item'.$get->id.'" value="'.$get->id.'">
+                  </div>
+                  <div class="card-body">
+                    <p class="card-text"> Piece Title:'. $get->Piece_Title.'<br>Lot Reference Number: '. $get->lotReferenceNumber.'<br>Artist: '.$get->artists.'</p>
+                    <a href="'.route("item.show",$get->id).'" class="btn btn-primary">View Item</a>
+                  </div>&nbsp;&nbsp;
+</div></div>';
+                }
+                if($i==0){
+                    $html=null;
+
+                }
+                else
+                    $html=$html.'</div>';
+            }
+            return view('backend.Auction.publish')->with('auction',$auction)->with('html',$html)->with('count',$count)->with('message',$message);
         }
-        return view('backend.Auction.publish')->with('auction',$auction)->with('html',$html)->with('count',$count)->with('message',$message);
-    }
+        else
+            return redirect('/redirect');
+       }
 
     /**
      * Update the specified resource in storage.
@@ -403,7 +415,7 @@ class AuctionController extends Controller
                 }
             }
         }
-        return redirect('auction')->with('message', 'The Auction is saved ');
+        return redirect('auction')->with('message', 'The Auction is updated ');
 
     }
 
@@ -577,7 +589,7 @@ class AuctionController extends Controller
     public function ajaxEdit($use,$id)
     {
 
-        $item = Item::query()->where('category_id', '=', $id)->where('approved', '=', 'allowed')->orWhere('auction_id', '=', $use)->where('auction_id', '=', null)->get();
+        $item = Item::query()->where('category_id', '=', $id)->where('approved', '=', 'allowed')->where('auction_id', '=', null)->orWhere('auction_id', '=', $use)->get();
         $html=' <label for="type" class="control-label col-md-12 col-sm-12 col-xs-12" >Select Items For Auction</label><div class="col-lg-10 col-md-10 col-sm-10 col-xs-12 d-flex justify-content-between row">
 ';
 //        dd($item);
@@ -616,12 +628,15 @@ else
         $html=' <label for="type" class="control-label col-md-12 col-sm-12 col-xs-12" >Select Items For Auction</label><div class="col-lg-10 col-md-10 col-sm-10 col-xs-12 d-flex justify-content-between row">
 ';
         foreach ($item as $get){
-
+            if($get->auction_id==$use)
+                $check="checked";
+            else
+                $check='';
 //            $html=$html. '<input type="checkbox" name="item'.$get->id.'" value="'.$get->id.'"><a href="'.route("item.show",$get->id).'"> Lot Reference Number:'.$get->lotReferenceNumber.' '.$get->Piece_Title.'</a></input>';
             $html= $html.'<div class="col-md-4 col-sm-4 col-xs-12" style="margin-top: 5px"><div class="card">
                   <div class="card-header ">
-                          <input type="checkbox" class="form-control" name="item'.$get->id.'" value="'.$get->id.'">
-                  </div>
+                          <input type="checkbox" class="form-control" name="item'.$get->id.'" value="'.$get->id.'" '.$check.'>
+       </div>
                   <div class="card-body">
                     <p class="card-text"> Piece Title:'. $get->Piece_Title.'<br>Lot Reference Number: '. $get->lotReferenceNumber.'<br>Artist: '.$get->artists.'</p>
                     <a href="'.route("item.show",$get->id).'" class="btn btn-primary">View Item</a>

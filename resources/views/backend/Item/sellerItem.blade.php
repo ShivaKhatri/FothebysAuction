@@ -1,4 +1,8 @@
 @extends('backend.sellerLayout')
+@section('headCss')
+    {{--<link  href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css" rel="stylesheet">--}}
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.4.2/css/buttons.dataTables.min.css">
+@endsection
 @section('content')
     <nav class="breadcrumb">
         <a class="breadcrumb-item" href="{{route('home')}}">Home</a>
@@ -6,7 +10,7 @@
     </nav>
     <div class="card">
         <div class="card-header">
-            Commission Bids
+                Sold Items Detail
         </div>
         <div class="card-body">
             {!! $dataTable->table(['class' => 'table table-striped ']) !!}
@@ -29,12 +33,12 @@
             e.preventDefault(); // does not go through with the link.
 
             var $this = $(this);
-
+console.log($this);
             $.post({
                 type: "DELETE",
                 url: $this.attr('href')
             }).done(function (data) {
-                window.location.replace('/items');
+                window.location.replace('/item/sold');
             });
         });
     </script>

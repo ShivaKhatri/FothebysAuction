@@ -1,4 +1,4 @@
-@extends('backend.layout')
+@extends('backend.'.$layout)
 @section('content')
     <nav class="breadcrumb">
         <a class="breadcrumb-item" href="{{route('home')}}">Home</a>

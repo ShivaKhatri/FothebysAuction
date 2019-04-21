@@ -61,7 +61,10 @@
                             }
                         @endphp
                         <div class="card-title">Classification: {{$classification->name}}</div>
-                        <div class="card-title">Client: {{$client->FirstName}} {{$client->Surname}}</div>
+                        <div class="card-title">Client: {{$client->FirstName}} {{$client->Surname}}
+                            <input name="client_id" type="number" value="{{$client->id}}" hidden>
+                            <input name="item_id" type="number" value="{{$item->id}}" hidden>
+                        </div>
                         {!! $html!!}
                         <div class="form-group">
                             <label class="control-label col-md-3 col-sm-3 col-xs-12" >Estimated Price<span class="required">*</span>
@@ -91,7 +94,7 @@
                             <label class="control-label col-md-3 col-sm-3 col-xs-12" >Experts Name
                             </label>
                             <div class="col-md-6 col-sm-6 col-xs-12">
-                                {{ Form::text('expert_name',null, array('class' => 'form-control col-md-7 col-xs-12','required'=>'')) }}
+                                {{ Form::text('expert_name',$item->expert_name, array('class' => 'form-control col-md-7 col-xs-12','required'=>'')) }}
                             </div>
                         </div>
                         <div class="form-group">
@@ -105,7 +108,7 @@
                             <label class="control-label col-md-3 col-sm-3 col-xs-12" >Additional Notes
                             </label>
                             <div class="col-md-6 col-sm-6 col-xs-12">
-                                <textarea class="textarea form-control" placeholder="Place some text here" name="additionalNote"></textarea>
+                                <textarea class="textarea form-control" placeholder="Place some text here" name="additionalNote">{{$item->additionalNote}}</textarea>
                             </div>
                         </div>
 

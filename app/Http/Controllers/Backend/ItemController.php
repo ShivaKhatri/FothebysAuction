@@ -12,6 +12,7 @@ use App\Model\Category;
 use App\Model\Classification;
 use App\Model\Detail;
 use App\Model\Image;
+use App\Model\Income;
 use App\Model\Item;
 use App\Model\SubCategory;
 use App\User;
@@ -19,6 +20,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 
 class ItemController extends Controller
 {
@@ -64,16 +66,28 @@ class ItemController extends Controller
     }
     public function bought(boughtDataTable $item)
     {
-        if(Auth::user()->Cstatus=="Buyer"||Auth::user()->Cstatus=="Both")
-            return $item->render('backend.Item.indexItem');
+            if (Auth::user()->Cstatus == "Buyer"){
+                return $item->render('backend.Item.buyerItem');
+            }
+            elseif(Auth::user()->Cstatus == "Both"){
+                return $item->render('backend.Item.bothItem');
+
+            }
+
         else
             return  redirect('/redirect');
 
     }
     public function sold(soldDataTable $item)
     {
-        if(Auth::user()->Cstatus=="Seller"||Auth::user()->Cstatus=="Both")
-            return $item->render('backend.Item.indexItem');
+            if (Auth::user()->Cstatus == "Seller"){
+                return $item->render('backend.Item.sellerItem');
+
+            }
+            elseif(Auth::user()->Cstatus == "Both"){
+                return $item->render('backend.Item.bothItem');
+
+        }
         else
             return  redirect('/redirect');
 
@@ -195,11 +209,18 @@ class ItemController extends Controller
         $category=Category::all()->pluck('name','id');
         $Subcategory=SubCategory::all()->pluck('name','id');
         $classification=Classification::all()->pluck('name','id');
-            return view('backend.Item.createItem')->with('category',$category)->with('Subcategory',$Subcategory)->with('classification',$classification);
+            if(Auth::user()->Cstatus=="Both")
+                $layout="bothLayout";
+            if(Auth::user()->Cstatus=="Seller")
+                $layout="sellerLayout";
+
+            if(Auth::user()->Cstatus=="Buyer")
+                $layout="buyerLayout";
+            return view('backend.Item.createItem')->with('category',$category)->with('Subcategory',$Subcategory)->with('classification',$classification)->with('layout',$layout);
 
         }
         else{
-            return view('/redirect');
+            return redirect('/redirect');
 
         }
     }
@@ -267,6 +288,29 @@ class ItemController extends Controller
 //            dd($file_name);
             $item->provenance_details = $file_name;
         }
+
+        if (!file_exists(public_path() . '/images/item/')) {
+            mkdir(public_path() . '/images/item/');
+        }
+        if ($request->frontImage) {
+            $file = $request->file('frontImage');
+            $file_name = rand(1345, 9898) . '_' . $file->getClientOriginalName();
+            $file->move(public_path() . '/images/item/', $file_name);
+//            dd($file_name);
+            $item->frontImage = $file_name;
+        }
+
+        if (!file_exists(public_path() . '/images/item/')) {
+            mkdir(public_path() . '/images/item/');
+        }
+        if ($request->backImage) {
+            $file = $request->file('backImage');
+            $file_name = rand(1345, 9898) . '_' . $file->getClientOriginalName();
+            $file->move(public_path() . '/images/item/', $file_name);
+//            dd($file_name);
+            $item->backImage = $file_name;
+        }
+
         $item->save();
 
 
@@ -427,14 +471,17 @@ class ItemController extends Controller
 
 
         $item=Item::find($id);
-        if(Item::find($id)->image()){
-            $image=Item::find($id)->image()->first();
+if(Auth::user()->Cstatus=="Both")
+    $layout="bothLayout";
+if(Auth::user()->Cstatus=="Seller")
+    $layout="sellerLayout";
 
-        }
-        else{
-            $image='';
-        }
-        return view('backend.Item.showItem')->with('category',$category)->with('SubCategory',$Subcategory)->with('classification',$classification)->with('client',$client)->with('item',$item)->with('html',$html)->with('image',$image);
+        if(Auth::user()->Cstatus=="Buyer")
+            $layout="buyerLayout";
+        if(Auth::user()->Cstatus=="Admin")
+            $layout="layout";
+
+        return view('backend.Item.showItem')->with('category',$category)->with('SubCategory',$Subcategory)->with('classification',$classification)->with('client',$client)->with('item',$item)->with('html',$html)->with('layout',$layout);
 
     }
 
@@ -452,7 +499,14 @@ class ItemController extends Controller
             $classification=Classification::all()->pluck('name','id');
             $expert=User::all()->where('Cstatus','=','Admin');
             $item=Item::find($id);
-            return view('backend.Item.editItem')->with('item',$item)->with('category',$category)->with('Subcategory',$Subcategory)->with('classification',$classification)->with('expert',$expert);
+            if(Auth::user()->Cstatus=="Both")
+                $layout="bothLayout";
+            if(Auth::user()->Cstatus=="Seller")
+                $layout="sellerLayout";
+
+            if(Auth::user()->Cstatus=="Buyer")
+                $layout="buyerLayout";
+            return view('backend.Item.editItem')->with('item',$item)->with('category',$category)->with('Subcategory',$Subcategory)->with('classification',$classification)->with('expert',$expert)->with('layout',$layout);
 
         }
         else
@@ -521,6 +575,27 @@ class ItemController extends Controller
 //            dd($file_name);
                 $item->provenance_details = $file_name;
             }
+            if (!file_exists(public_path() . '/images/item/')) {
+                mkdir(public_path() . '/images/item/');
+            }
+            if ($request->frontImage) {
+                $file = $request->file('frontImage');
+                $file_name = rand(1345, 9898) . '_' . $file->getClientOriginalName();
+                $file->move(public_path() . '/images/item/', $file_name);
+//            dd($file_name);
+                $item->frontImage = $file_name;
+            }
+
+            if (!file_exists(public_path() . '/images/item/')) {
+                mkdir(public_path() . '/images/item/');
+            }
+            if ($request->backImage) {
+                $file = $request->file('backImage');
+                $file_name = rand(1345, 9898) . '_' . $file->getClientOriginalName();
+                $file->move(public_path() . '/images/item/', $file_name);
+//            dd($file_name);
+                $item->backImage = $file_name;
+            }
             $item->save();
 
 
@@ -573,7 +648,9 @@ class ItemController extends Controller
             }
         }
         elseif(Auth::user()->Cstatus=="Admin"){
+//            $get=Item::find($request->item_id);
 //            dd($request->expert_name);
+//            dd($get->Piece_Title);
             $item->update([
 
                 'estimated_price_from'=>$request->estimated_price_from,
@@ -589,7 +666,29 @@ class ItemController extends Controller
 
 
             ]);
+            if($request->approve=="allowed"){
+                $client = User::find($request->client_id);
+                $name = $client->FirstName;
+                $email = $client->email;
 
+                $get=Item::find($request->item_id);
+                $body =
+
+                        "Dear " . $client->FirstName . ",
+                        
+                        We are pleased to inform you that your piece, " . $get->Piece_Title . " Lot Reference Number: ".$get->lotReferenceNumber.", has been Verified for sale at our auction. The estimated value of your item is £".$request->estimated_price_from." to £".$request->estimated_price_to."
+                        
+                        Mr M Fotherby
+                        ";
+
+                $data = array('name' => $name, "body" => $body);
+
+                Mail::send('backend.mail.mail', $data, function ($message) use ($name, $email) {
+                    $message->from('shivakhatri665@gmail.com', 'Shiva');
+
+                    $message->to($email, $name)->subject('Item Verification');
+                });
+            }
             if (!file_exists(public_path() . '/images/item/')) {
                 mkdir(public_path() . '/images/item/');
             }
@@ -628,7 +727,15 @@ class ItemController extends Controller
                 'success' => 'Record not deleted!'
             ]);
         }
-
+if(Auth::user()->Cstatus=="Both"||Auth::user()->Cstatus=="Seller"){
+    $item=Item::find($id)->where('approve','=','allowed');
+    $remove_price=$item->estimated_price_from*(5/100);
+    $income=new Income();
+    $income->client_id=Auth::user()->id;
+    $income->item_id=$id;
+    $income->remove_price=$remove_price;
+    $income->save();
+}
 
         $item_value=DB::table('detail_item_value');//assigns item value with detail item model
         $item_value->where('item_id','=',$id)->delete();//deletes the row whose item id matches with the $id

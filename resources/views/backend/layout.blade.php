@@ -161,7 +161,12 @@
         <li class="nav-item">
             <a class="nav-link" href="{{route('auction.index')}}">
                 <i class="fas fa-fw fa-chart-area"></i>
-                <span>Auction</span></a>
+                <span>Auction Setting</span></a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{{route('auctioned.index')}}">
+                <i class="fas fa-fw fa-chart-area"></i>
+                <span>Auctioneer Table</span></a>
         </li>
 
 

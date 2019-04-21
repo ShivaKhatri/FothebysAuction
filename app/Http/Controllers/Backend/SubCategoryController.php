@@ -20,7 +20,12 @@ class SubCategoryController extends Controller
     public function index(SubCategoryDatatable $dataTable)
 
     {
-        return $dataTable->render('backend.subCategory.indexCategory');
+        if(Auth::user()->Cstatus=="Admin") {//{{Cstatus = User Type: Admin, Buyer, Seller, A customer who buys and sells item in fothebys as "Both" )
+            // When a user  tries to access this view the Cstatus of the user will  be checked
+            return $dataTable->render('backend.subCategory.indexCategory');
+} else
+            return redirect('/redirect');
+
 
 
     }
@@ -32,8 +37,12 @@ class SubCategoryController extends Controller
      */
     public function create()
     {
-        $category=Category::all()->pluck('name','id');
-        return view('backend.subCategory.createCategory')->with('category',$category);
+        if(Auth::user()->Cstatus=="Admin") {//{{Cstatus = User Type: Admin, Buyer, Seller, A customer who buys and sells item in fothebys as "Both" )
+            // When a user  tries to access this view the Cstatus of the user will  be checked
+            $category=Category::all()->pluck('name','id');
+            return view('backend.subCategory.createCategory')->with('category',$category);
+        } else
+            return redirect('/redirect');
     }
 
     /**
@@ -72,9 +81,14 @@ class SubCategoryController extends Controller
      */
     public function edit($id)
     {
-        $subCategory=SubCategory::find($id);
-        $category=Category::all()->pluck('name','id');
-        return view('backend.subCategory.editCategory')->with('subCategory',$subCategory)->with('category',$category);
+        if(Auth::user()->Cstatus=="Admin") {//{{Cstatus = User Type: Admin, Buyer, Seller, A customer who buys and sells item in fothebys as "Both" )
+            // When a user  tries to access this view the Cstatus of the user will  be checked
+            $subCategory=SubCategory::find($id);
+            $category=Category::all()->pluck('name','id');
+            return view('backend.subCategory.editCategory')->with('subCategory',$subCategory)->with('category',$category);
+        } else
+            return redirect('/redirect');
+
     }
 
     /**

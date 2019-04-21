@@ -37,40 +37,47 @@ class CommisionBidController extends Controller
      */
     public function create()
     {
-        $array=[];
-        $auction=Auction::all();
-        $for=0;
-        foreach ($auction as $get){
-            $commiDate= date("Y-m-d", strtotime("+1 day"));
+        if(Auth::user()->Cstatus=="Buyer"||Auth::user()->Cstatus=="Both")//{{Cstatus = User Type: Admin, Buyer, Seller, A customer who buys and sells item in fothebys as "Both" )
+            // When a user  tries to access this view the Cstatus of the user will  be checked
+        {
+            $array=[];
+            $auction=Auction::all();
+            $for=0;
+            foreach ($auction as $get){
+                $commiDate= date("Y-m-d", strtotime("+1 day"));
 //            dd($get->date);
 
-            if($get->date==$commiDate) {
+                if($get->date==$commiDate) {
 //                    $queryItem=Item::query()->where('auction_id','=',$get->id)->get();
                     if ($for > 0) {
 //                        $item=[$item,$queryItem];
                         $array = [$array, $get];
                     }
-                        else{
+                    else{
 //                            $item=[$queryItem];
 
-                            $array = [$get];}
+                        $array = [$get];}
 
-                $for=$for+1;
+                    $for=$for+1;
 
 
                 }
 
-        }
-        if($for==0){
-            $array=null;
-            return view('backend.comission_bid.buyerComissionBid')->with('array',$array)->with('message',"No Commission Bid Available At The Moment");
+            }
+            if($for==0){
+                $array=null;
+                return view('backend.comission_bid.buyerComissionBid')->with('array',$array)->with('message',"No Commission Bid Available At The Moment");
+
+            }
+            else
+                return view('backend.comission_bid.buyerComissionBid')->with('array',$array);
+
+
 
         }
-        else
-            return view('backend.comission_bid.buyerComissionBid')->with('array',$array);
-
-
-    }
+        else//if the user isnt either of the above the they are redirected to home page--}}
+            return redirect('/redirect');
+      }
 
     /**
      * Store a newly created resource in storage.
@@ -112,7 +119,15 @@ class CommisionBidController extends Controller
         $auction=Item::find($id)->auction()->first();
         $item=Item::find($id);
 //        dd($auction->id);
-        return view('backend.comission_bid.commisionBid')->with('auction',$auction)->with('item',$item);
+        if(Auth::user()->Cstatus=="Both")
+            return view('backend.comission_bid.commisionBid')->with('auction',$auction)->with('item',$item)->with('layout','bothLayout');
+
+        elseif(Auth::user()->Cstatus=="Buyer")
+            return view('backend.comission_bid.commisionBid')->with('auction',$auction)->with('item',$item)->with('layout','sellerLayout');
+
+        else
+            return redirect('/redirect');
+
 
     }
 

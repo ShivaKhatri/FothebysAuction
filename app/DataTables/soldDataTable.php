@@ -19,9 +19,19 @@ class soldDataTable extends DataTable
     {
         return datatables($query)
             ->addColumn('action', function ($detail) {
+                $item=Item::find($detail->id);
+                $auction=$item->auction()->first();
+
+                if($auction->sold==null)
                 return '<a href="'.route('item.show',$detail->id).'" class="btn btn-sm btn-success" style="margin:3px">
                          Show</a><a href="'.route('item.edit',$detail->id).'" class="btn btn-sm btn-primary" style="margin:3px">
                         <i class="glyphicon glyphicon-edit"></i> Edit</a>&nbsp;&nbsp;<a href="'.route('item.destroy',$detail->id).'" class="btn btn-sm btn-danger" id="delete" ><i class="glyphicon glyphicon-remove"></i> Delete</a>';
+           else
+               return '<a href="'.route('item.show',$detail->id).'" class="btn btn-sm btn-success" style="margin:3px">
+                         Show</a><a href="'.route('item.edit',$detail->id).'" class="btn btn-sm btn-primary" style="margin:3px">
+                        <i class="glyphicon glyphicon-edit"></i> Edit</a>';
+
+
             })
             ->addColumn('Auction_Date', function ($detail) {
 

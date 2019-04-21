@@ -20,7 +20,13 @@ class DetailController extends Controller
      */
     public function index(DetailDatatable $datatable)
     {
-        return $datatable->render('backend.Detail.indexDetail');
+        if(Auth::user()->Cstatus=="Admin")//{{Cstatus = User Type: Admin, Buyer, Seller, A customer who buys and sells item in fothebys as "Both" )
+            // When a user  tries to access this view the Cstatus of the user will  be checked
+            return $datatable->render('backend.Detail.indexDetail');
+
+        else
+            return redirect('/redirect');
+
     }
 
     /**
@@ -30,8 +36,14 @@ class DetailController extends Controller
      */
     public function create()
     {
-        $category=Category::all()->pluck('name','id');
-        return view('backend.Detail.createDetail')->with('category',$category);
+        if(Auth::user()->Cstatus=="Admin") {//{{Cstatus = User Type: Admin, Buyer, Seller, A customer who buys and sells item in fothebys as "Both" )
+            // When a user  tries to access this view the Cstatus of the user will  be checked
+            $category = Category::all()->pluck('name', 'id');
+            return view('backend.Detail.createDetail')->with('category', $category);
+        } else
+            return redirect('/redirect');
+
+
 
     }
 
@@ -92,10 +104,16 @@ class DetailController extends Controller
      */
     public function edit($id)
     {
-        $category=Category::all()->pluck('name','id');
-        $detail=Detail::find($id);
-        return view('backend.Detail.editDetail')->with('detail',$detail)->with('category',$category);
-    }
+        if(Auth::user()->Cstatus=="Admin") {//{{Cstatus = User Type: Admin, Buyer, Seller, A customer who buys and sells item in fothebys as "Both" )
+            // When a user  tries to access this view the Cstatus of the user will  be checked
+
+            $category=Category::all()->pluck('name','id');
+            $detail=Detail::find($id);
+            return view('backend.Detail.editDetail')->with('detail',$detail)->with('category',$category);
+        } else
+            return redirect('/redirect');
+
+ }
 
     /**
      * Update the specified resource in storage.

@@ -1,10 +1,11 @@
-@extends('backend.layout')
+@extends('backend.'.$layout)
 @section('content')
+
     {{--<div class="row">--}}
     <!-- general form elements -->
     <nav class="breadcrumb">
         <a class="breadcrumb-item" href="{{route('home')}}">Home</a>
-        <a class="breadcrumb-item" href="{{route('item.index')}}">Item</a>
+        <a class="breadcrumb-item" href="{{route('item.sold')}}">Item</a>
         <span class="breadcrumb-item active"> Sell Item</span>
     </nav>
     <div class="container">
@@ -89,6 +90,21 @@
                             </label>
                             <div class="col-md-6 col-sm-6 col-xs-12">
                                 <input multiple="multiple" name="provenance" type="file">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12" >Front Side Image of Item<span class="required">*</span>
+                            </label>
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                <input  name="frontImage" type="file">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12" >Back Side Image of Item<span class="required">*</span>
+                            </label>
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                <input  name="backImage" type="file">
                             </div>
                         </div>
                         <div   id="additionalDetail">

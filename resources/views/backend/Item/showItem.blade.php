@@ -1,4 +1,4 @@
-@extends('backend.layout')
+@extends('backend.'.$layout)
 @section('content')
     <nav class="breadcrumb">
         <a class="breadcrumb-item" href="{{route('home')}}">Home</a>
@@ -12,9 +12,7 @@
                     <div class="card-header">{{ __('Verification') }}</div>
 
                     <div class="card-body">
-                        @if(!($image==null||$image==''))
-                            <img class="card-img-top" src="{{asset('images/item/'.$image->image)}}" >
-                        @endif
+                            <img class="card-img-top" src="{{asset('images/item/'.$item->frontImage)}}" >
 
                         <div class="card-title">Piece Title: {{$item->Piece_Title}}</div>
                         <div class="card-title">Lot Reference Number: {{$item->lotReferenceNumber}}</div>

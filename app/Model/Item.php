@@ -29,10 +29,13 @@ class Item extends Model
         'expert_id',
         'auction_id',
         'approved',
+        'frontImage',
+        'backImage',
         'expert_name',
         'lastNumber',
         'additional_notes',
-        'signed_date'
+        'signed_date',
+        'auctioneer_comment'
     ];
     public function admin()
     {
@@ -49,6 +52,10 @@ class Item extends Model
     public function classification()
     {
         return $this->belongsTo('App\Model\Classification','classification_id');
+    }
+    public function sold()
+    {
+        return $this->belongsTo('App\User','sold_to_id');
     }
     public function detailValue()
     {
@@ -69,5 +76,9 @@ class Item extends Model
     public function bid()
     {
         return $this->hasMany('App\Model\Commission_Bid','item_id');
+    }
+    public function income()
+    {
+        return $this->hasMany('App\Model\Income','item_id');
     }
 }

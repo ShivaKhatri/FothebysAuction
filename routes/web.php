@@ -52,6 +52,9 @@ Route::resource('test','TestController');
 Route::resource('commission','Backend\CommisionBidController');
 Route::get('commission/bid/{id}', 'Backend\CommisionBidController@bid')->name('commission.bid');
 
+Route::get('auctioned/auctioneer/{id}', 'Backend\AuctionedController@auctioneer')->name('auctioned.auctioneer');
+Route::resource('auctioned','Backend\AuctionedController');
+
 Route::resource('auction','Backend\AuctionController');
 Route::get('auction/theme/{id}', 'Backend\AuctionController@theme')->name('auction.theme');
 Route::get('auction/ajax/{id}', 'Backend\AuctionController@ajax')->name('auction.ajax');
