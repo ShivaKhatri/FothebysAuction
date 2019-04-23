@@ -16,6 +16,7 @@ class CreateAuctionsTable extends Migration
         Schema::create('auctions', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->integer('lotNumber');
+            $table->string('Auction_Title');
             $table->string('themeValue');
             $table->string('themeName');
             $table->string('description')->nullable();

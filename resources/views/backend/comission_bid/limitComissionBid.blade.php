@@ -21,11 +21,13 @@
                     Bank Account No: {{$user->bank_no}}<br>
                     Bank Sort Code: {{$sort[0]}} - {{$sort[1]}} - {{$sort[2]}}
                 </p>
+                <div class="alert alert-warning" role="alert">
+                    <h5 class="card-title">Previous Limit</h5>
+                    <p class="card-text"><strong>{{$user->bidLimit}}</strong> </p>
+                </div>
 
-                <h5 class="card-title">Verified By</h5>
-                <p class="card-text">{{$verified_by->FirstName}} {{$verified_by->Surname}}</p>
-                {!! Form::model($subCategory, [
-              'route' => ['user.update', $subCategory->id],
+                {!! Form::model($user, [
+              'route' => ['commission.updateLimit', $user->id],
               'class' =>"form-horizontal form-label-left",
               'method' => 'PUT',
               'id' => 'sectionForm',
@@ -33,6 +35,21 @@
           ])
           !!}
 
+                <div class="form-group">
+                    <label class="control-label col-md-12 col-sm-12 col-xs-12" >New Commission Bid Limit<span class="required">*</span>
+                    </label>
+                    <div class="col-md-10 col-sm-10 col-xs-12">
+                        {{ Form::number('limit',$user->bidLimit, array('class' => 'form-control col-md-7 col-xs-12','required'=>'')) }}
+                    </div>
+                </div>
+
+                <div class="form-group row mb-0">
+                    <div class="col-md-6 offset-md-4">
+                        <button type="submit" class="btn btn-primary">
+                            {{ __('Change Limit') }}
+                        </button>
+                    </div>
+                </div>
                 {!! Form::close() !!}
             </div>
         </div>

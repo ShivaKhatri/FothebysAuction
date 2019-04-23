@@ -28,6 +28,7 @@ class Item extends Model
         'customer_agreement',
         'expert_id',
         'auction_id',
+        'auction_date',
         'approved',
         'frontImage',
         'backImage',

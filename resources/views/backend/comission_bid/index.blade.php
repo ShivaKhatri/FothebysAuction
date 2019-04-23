@@ -1,4 +1,4 @@
-@extends('backend.buyerLayout')
+@extends('backend.layout')
 @section('content')
     <nav class="breadcrumb">
         <a class="breadcrumb-item" href="{{route('home')}}">Home</a>
@@ -34,7 +34,7 @@
                 type: "DELETE",
                 url: $this.attr('href')
             }).done(function (data) {
-                window.location.replace('/items');
+                window.location.replace('/commission');
             });
         });
     </script>

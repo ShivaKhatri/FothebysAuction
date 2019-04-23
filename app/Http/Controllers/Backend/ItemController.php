@@ -485,6 +485,110 @@ if(Auth::user()->Cstatus=="Seller")
 
     }
 
+    public function frontShow($id)
+    {
+        $category=Item::find($id)->category()->first();
+        $Subcategory=Item::find($id)->subCategory()->first();
+        $classification=Item::find($id)->classification()->first();
+
+        $detail = Category::find($category->id)->detail()->get();
+        $html='';
+        foreach ($detail as $get) {
+            $detailValue = Detail::find($get->id)->detailValue()->get();
+            $count = count($detailValue);
+            $i=0;
+            $html=$html.'<div class="card-title">'.$get->name;
+            foreach ($detailValue as $value) {
+                $i=$i+1;
+                if ($value->type == "text") {
+                    if ($value->name == "null") {
+                        $item_value=DB::table('detail_item_value')->select('string')->where('item_id','=',$id)->where('detail_value_id','=',$value->id);
+                        foreach ($item_value->get() as $valueName){
+                            $html=$html.': '.$valueName->string.'</div>';
+
+//                            dd($html);
+
+
+                        }
+//dd($item_value->get());
+                    } else {
+                        $name = $value->name;
+                        $item_value=DB::table('detail_item_value')->select('string')->where('item_id','=',$id)->where('detail_value_id','=',$value->id);
+                        foreach ($item_value->get() as $valueName){
+                            if($i==1)
+                                $html=$html.'<p>'.$name.': '.$valueName->string;
+                            else
+                                $html=$html.'        '.$name.': '.$valueName->string;
+
+                            if($i==$count){
+                                $html=$html.'</p></div>';
+                            }
+                        }
+
+
+                    }
+                } elseif ($value->type == "number") {
+                    if ($value->name == "null") {
+                        $item_value=DB::table('detail_item_value')->select('integer')->where('item_id','=',$id)->where('detail_value_id','=',$value->id);
+                        foreach ($item_value->get() as $valueName){
+                            $html=$html.': '.$valueName->integer.'</div>';
+//                            dd($html);
+                        }
+
+                    } else {
+                        $name = $value->name;
+
+                        $item_value=DB::table('detail_item_value')->select('integer')->where('item_id','=',$id)->where('detail_value_id','=',$value->id);
+                        foreach ($item_value->get() as $valueName){
+                            if($i==1)
+                                $html=$html.'<p>'.$name.': '.$valueName->integer;
+                            else
+                                $html=$html.'        '.$name.': '.$valueName->integer;
+
+//                            if($i==$count){
+//                                $html=$html.'</p></div>';
+//                            }
+//                            $html=$html.'</div><br><div class="card-title">: '.$name.' '.$valueName->integer.'</div>';
+                            if($i==$count){
+                                $html=$html.'</p></div>';
+                            }
+                        }
+                    }
+                } elseif ($value->type == "date") {
+                    if ($value->name == "null") {
+                        $item_value=DB::table('detail_item_value')->select('date')->where('item_id','=',$id)->where('detail_value_id','=',$value->id);
+                        foreach ($item_value->get() as $valueName){
+                            $html=$html.': '.$valueName->date.'</div>';
+//                            dd($html);
+                        }
+
+                    } else {
+                        $name = $value->name;
+                        $item_value=DB::table('detail_item_value')->select('date')->where('item_id','=',$id)->where('detail_value_id','=',$value->id);
+                        foreach ($item_value->get() as $valueName){
+                            if($i==1)
+                                $html=$html.'<p>'.$name.': '.$valueName->date;
+                            else
+                                $html=$html.'        '.$name.': '.$valueName->date;
+
+//                            $html=$html.'<div class="card-title">: '.$name.' '.$valueName->date.'</div>';
+                            if($i==$count){
+                                $html=$html.'</p></div>';
+                            }
+                        }
+                    }
+                }
+
+            }
+        }
+
+
+        $item=Item::find($id);
+
+        return view('frontend.items')->with('category',$category)->with('SubCategory',$Subcategory)->with('classification',$classification)->with('item',$item)->with('html',$html);
+
+    }
+
     /**
      * Show the form for editing the specified resource.
      *

@@ -7,7 +7,7 @@
     </nav>
     <div class="row d-flex justify-content-center">
 
-<div class="card col-lg-4 col-md-4 col-sm-4 col-xs-8">
+<div class="card col-lg-5 col-md-5 col-sm-5 col-xs-8">
     <div class="card-header">
        <h5 ><strong>{{$user->title}}  {{$user->FirstName}} {{$user->Surname}}</strong></h5>
     </div>
@@ -16,15 +16,18 @@
         <p class="card-text">Email:{{$user->email}}</p>
         <p class="card-text">Telephone Number:{{$user->phone_no}}</p>
         <p class="card-text">Address:{{$user->address}}</p>
+        <p class="card-text">Commission Bid Limit:{{$user->bidLimit}}</p>
         <h5 class="card-title">Bank Details </h5>
         <p class="card-text">
             Bank Account No: {{$user->bank_no}}<br>
             Bank Sort Code: {{$sort[0]}} - {{$sort[1]}} - {{$sort[2]}}
             </p>
 
-        <h5 class="card-title">Verified By</h5>
-        <p class="card-text">{{$verified_by->FirstName}} {{$verified_by->Surname}}</p>
-    </div>
+        <div class="alert alert-success" role="alert">
+            <h5 class="card-title">Verified By</h5>
+            <p class="card-text">{{$verified_by->FirstName}} {{$verified_by->Surname}}</p>
+        </div>
+        </div>
 </div>
     </div>
     @endsection

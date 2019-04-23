@@ -37,8 +37,12 @@ Route::resource('detail','Backend\DetailController');
 Route::resource('classification','Backend\ClassificationController');
 Route::resource('buyer','Backend\BuyerController');
 
+Route::post('item/advance', 'Backend\SearchController@advance')->name('search.advance');
+Route::resource('search','Backend\SearchController');
+
 Route::get('item/{use}/ajax/{id}', 'Backend\ItemController@ajaxEdit')->name('item.ajaxEdit');
 
+Route::get('item/frontShow/{id}', 'Backend\ItemController@frontShow')->name('item.frontShow');
 Route::get('item/ajax/{id}', 'Backend\ItemController@ajax')->name('item.ajax');
 Route::get('item/inReview', 'Backend\ItemController@inReview')->name('item.inReview');
 Route::get('item/verified', 'Backend\ItemController@verified')->name('item.verified');
@@ -49,8 +53,12 @@ Route::get('item/addDetail/{id}', 'Backend\ItemController@addDetail')->name('ite
 Route::resource('item','Backend\ItemController');
 Route::resource('test','TestController');
 
+Route::resource('slider','Frontend\SliderController');
 Route::resource('commission','Backend\CommisionBidController');
 Route::get('commission/bid/{id}', 'Backend\CommisionBidController@bid')->name('commission.bid');
+Route::get('limit/index', 'Backend\CommisionBidController@limitIndex')->name('commission.limitIndex');
+Route::get('limit/buyer/{id}', 'Backend\CommisionBidController@limit')->name('commission.limit');
+Route::PUT('limit/buyer/{id}', 'Backend\CommisionBidController@updateLimit')->name('commission.updateLimit');
 
 Route::get('auctioned/auctioneer/{id}', 'Backend\AuctionedController@auctioneer')->name('auctioned.auctioneer');
 Route::resource('auctioned','Backend\AuctionedController');

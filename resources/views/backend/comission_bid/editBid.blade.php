@@ -12,11 +12,19 @@
                     <div class="card-header with-border">
                         <h3 class="card-title">Commission Bid on this item</h3>
                     </div>
-                    {!! Form::open(array('route'=>'commission.store', 'class' =>"form-horizontal form-label-left", 'method' => 'post', 'id'=>'sectionForm', 'enctype' => "multipart/form-data")) !!}
+                    <div class="card-body">
+                        {!! Form::model($commission, [
+                              'route' => ['commission.update', $commission->id],
+                              'class' =>"form-horizontal form-label-left",
+                              'method' => 'PUT',
+                              'id' => 'sectionForm',
+                              'enctype' => "multipart/form-data",
+                          ])
+                          !!}
                     <div class="card-body">
                         @php
                             $limit=\Illuminate\Support\Facades\Auth::user()->bidLimit;
-                        if($item->frontImage==null){
+                         if($item->frontImage){
                         $image='';
                         }
                         else
@@ -36,12 +44,12 @@
                             <div class="row"><label class="control-label col-md-6 col-sm-6 col-xs-12" >Open<span class="required">*</span>
                                 </label><label class="control-label col-md-6 col-sm-6 col-xs-12" >Max<span class="required">*</span>
                                 </label>
-                            <div class="col-md-6 col-sm-6 col-xs-12">
-                                {{ Form::number('open',null, array('class' => 'form-control col-md-7 col-xs-12','max'=>$limit,'required'=>'')) }}
-                            </div>
-                            <div class="col-md-6 col-sm-6 col-xs-12">
-                                {{ Form::number('max',null, array('class' => 'form-control col-md-7 col-xs-12','max'=>$limit,'required'=>'')) }}
-                            </div>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    {{ Form::number('open',null, array('class' => 'form-control col-md-7 col-xs-12','required'=>'')) }}
+                                </div>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    {{ Form::number('max',null, array('class' => 'form-control col-md-7 col-xs-12','max'=>$limit,'required'=>'')) }}
+                                </div>
                             </div>
                         </div>
 

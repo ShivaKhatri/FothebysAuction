@@ -36,8 +36,18 @@ class ClientBidDataTable extends DataTable
                 return $wow;
             })
             ->addColumn('action', function ($category) {
-                return '<a href="'.route('classification.edit',$category->id).'" class="btn btn-sm btn-primary" style="margin:3px">
-                        <i class="glyphicon glyphicon-edit"></i> Edit</a>&nbsp;&nbsp;<a href="'.route('classification.destroy',$category->id).'" class="btn btn-sm btn-danger" id="delete" ><i class="glyphicon glyphicon-remove"></i> Delete</a>';
+                $commission=Commission_Bid::find($category->id)->auction()->first();
+$today=date('Y-m-d');
+$today=new \DateTime($today);
+$auction=new \DateTime($commission->auction_date);
+                if($auction<$today)
+                    return '<div class="alert alert-success" role="alert">
+  Auction Has Already been conducted
+</div>';
+
+                else
+                return '<a href="'.route('commission.edit',$category->id).'" class="btn btn-sm btn-primary" style="margin:3px">
+                        <i class="glyphicon glyphicon-edit"></i> Edit</a>&nbsp;&nbsp;<a href="'.route('commission.destroy',$category->id).'" class="btn btn-sm btn-danger" id="delete" ><i class="glyphicon glyphicon-remove"></i> Delete</a>';
             })
             ->rawColumns(['Item','Auction', 'action']);
     }

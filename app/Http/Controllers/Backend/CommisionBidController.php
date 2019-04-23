@@ -4,9 +4,12 @@ namespace App\Http\Controllers\Backend;
 
 use App\DataTables\ClientBidDataTable;
 use App\DataTables\CommisionBidDatatable;
+use App\DataTables\LimitCommissionBidDataTable;
 use App\Model\Auction;
 use App\Model\Commission_Bid;
 use App\Model\Item;
+use App\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -21,7 +24,7 @@ class CommisionBidController extends Controller
     public function index(CommisionBidDatatable $datatable, ClientBidDataTable $cdatatable)
     {
         if(Auth::user()->Cstatus=="Admin")
-        return $datatable->render('backend.comission_bid.indexComission');
+        return $datatable->render('backend.comission_bid.index');
         elseif(Auth::user()->Cstatus=="Buyer")
             return $cdatatable->render('backend.comission_bid.indexComission');
         else
@@ -133,7 +136,18 @@ class CommisionBidController extends Controller
 
     public function edit($id)
     {
-        //
+        $commission=Commission_Bid::find($id);
+        $auction=Commission_Bid::find($id)->auction()->first();
+        $item=Commission_Bid::find($id)->item()->first();
+//        dd($item);
+        if(Auth::user()->Cstatus=="Both")
+            return view('backend.comission_bid.editBid')->with('auction',$auction)->with('item',$item)->with('layout','bothLayout')->with('commission',$commission);
+
+        elseif(Auth::user()->Cstatus=="Buyer")
+            return view('backend.comission_bid.editBid')->with('auction',$auction)->with('item',$item)->with('layout','sellerLayout')->with('commission',$commission);
+
+        else
+            return redirect('/redirect');
     }
 
     /**
@@ -145,7 +159,14 @@ class CommisionBidController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $commission=Commission_Bid::find($id);
+        $commission->auction_id=$request->auction_id;
+        $commission->open=$request->open;
+        $commission->max=$request->max;
+        $commission->item_id=$request->item_id;
+        $commission->client_id=Auth::user()->id;
+        $commission->save();
+        return redirect('commission');
     }
 
     /**
@@ -157,5 +178,30 @@ class CommisionBidController extends Controller
     public function destroy($id)
     {
         //
+    }
+    public function limit($id)
+    {
+        if(Auth::user()->Cstatus=="Admin"){
+            $user=User::find($id);
+            $sort = str_split($user->bank_sort_no, 2);
+            return view('backend.comission_bid.limitComissionBid')->with('user',$user)->with('sort',$sort);}
+
+        else
+            return redirect('/redirect');
+    }
+    public function limitIndex(LimitCommissionBidDataTable $datatable)
+    {
+        if(Auth::user()->Cstatus=="Admin")
+            return $datatable->render('backend.comission_bid.limitIndex');
+        else
+            return redirect('/redirect');
+    }
+    public function updateLimit(Request $request, $id)
+    {
+        $detail=User::find($id);
+        $detail->update([
+            'bidLimit'=>$request->limit
+        ]);
+        return redirect('/limit/index');
     }
 }

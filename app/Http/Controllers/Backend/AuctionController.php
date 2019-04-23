@@ -79,6 +79,7 @@ class AuctionController extends Controller
         }
         $auction=new Auction();
         $auction->themeName=$request->theme;
+        $auction->Auction_Title=$request->Auction_Title;
         $auction->lotNumber=$num+1;
         if($request->theme=='Category') {
             $count = Item::all()->where('category_id', '=', $request->themeValue)->where('approved', '=', 'allowed')->count();
@@ -132,6 +133,8 @@ class AuctionController extends Controller
                     $itemAuctoin=Item::find($get->id);
                     $itemAuctoin->update([
                         'auction_id'=>$id,
+                        'auction_date'=>$request->date,
+
                         'lotNumber'=>$auction->lotNumber
                     ]);
 
@@ -147,6 +150,8 @@ class AuctionController extends Controller
                     $itemAuctoin=Item::find($get->id);
                     $itemAuctoin->update([
                         'auction_id'=>$auction->id,
+                        'auction_date'=>$request->date,
+
                         'lotNumber'=>$auction->lotNumber
                     ]);
 
@@ -337,6 +342,7 @@ class AuctionController extends Controller
         }
         $auction=Auction::find($id);
         $auction->themeName=$request->theme;
+        $auction->Auction_Title=$request->Auction_Title;
         $auction->lotNumber=$num;
         if($request->theme=='Category') {
 //            $count =0;
@@ -393,6 +399,7 @@ class AuctionController extends Controller
                     $itemAuctoin=Item::find($get->id);
                     $itemAuctoin->update([
                         'auction_id'=>$id,
+                        'auction_date'=>$request->date,
                         'lotNumber'=>$auction->lotNumber
                     ]);
 
@@ -409,6 +416,8 @@ class AuctionController extends Controller
                     $itemAuctoin=Item::find($get->id);
                     $itemAuctoin->update([
                         'auction_id'=>$auction->id,
+                        'auction_date'=>$request->date,
+
                         'lotNumber'=>$auction->lotNumber
                     ]);
 

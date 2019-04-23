@@ -23,6 +23,7 @@ class CreateItemsTable extends Migration
             $table->integer('to')->nullable();
             $table->integer('classification_id');
             $table->integer('auction_id')->nullable();//admin
+            $table->date('auction_date')->nullable();//admin
             $table->integer('category_id');
             $table->string('frontImage');
             $table->string('backImage');

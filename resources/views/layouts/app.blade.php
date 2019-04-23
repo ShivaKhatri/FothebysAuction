@@ -30,13 +30,7 @@
         <div class="collapse navbar-collapse row" id="navbarCollapse">
             <ul class="navbar-nav  d-flex justify-content-center col-md-8">
                 <li class="nav-item ">
-                    <a class="nav-link" href="#">Home</a>
-                </li>
-                <li class="nav-item ">
-                    <a class="nav-link" href="#">Auction</a>
-                </li>
-                <li class="nav-item ">
-                    <a class="nav-link" href="#">Items</a>
+                    <a class="nav-link" href="{{route('welcome')}}">Home</a>
                 </li>
                 <li class="nav-item ">
                     <a class="nav-link" href="{{route('buyer')}}">Buyer</a>
@@ -60,9 +54,10 @@
 
 
             </ul>
-            <form class="form-inline mt-2 mt-md-0 col-md-4">
-                <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">
-                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+            <form class="form-inline mt-2 mt-md-0 col-md-4" action="{{route('search.store')}}" id="search" method="post">
+                @csrf
+                <input name="search"  class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">
+                <button class="btn btn-outline-success my-2 my-sm-0" form="search" type="submit">Search</button>
             </form>
         </div>
     </nav>

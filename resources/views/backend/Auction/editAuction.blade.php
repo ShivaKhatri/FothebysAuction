@@ -20,6 +20,13 @@
                               'enctype' => "multipart/form-data",
                           ])
                           !!}
+                        <div class="form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12" >Auction Title<span class="required">*</span>
+                            </label>
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                {{ Form::text('Auction_Title',$auction->Auction_Title, array('class' => 'form-control col-md-7 col-xs-12','required'=>'')) }}
+                            </div>
+                        </div>
                         <div   class="form-group ">
                             <label for="type" class="control-label col-md-3 col-sm-3 col-xs-12" >{{ __('Category') }}</label>
 

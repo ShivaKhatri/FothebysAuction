@@ -1,12 +1,12 @@
-@extends('backend.buyerLayout')
+@extends('backend.layout')
 @section('content')
     <nav class="breadcrumb">
         <a class="breadcrumb-item" href="{{route('home')}}">Home</a>
-        <span class="breadcrumb-item active">  Item</span>
+        <span class="breadcrumb-item active">Commission  Bid</span>
     </nav>
     <div class="card">
         <div class="card-header">
-            Commission Bids
+            Buyers
         </div>
         <div class="card-body">
             {!! $dataTable->table(['class' => 'table table-striped ']) !!}
@@ -34,7 +34,7 @@
                 type: "DELETE",
                 url: $this.attr('href')
             }).done(function (data) {
-                window.location.replace('/items');
+                window.location.replace('/limit/index');
             });
         });
     </script>

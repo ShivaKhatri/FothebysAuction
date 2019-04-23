@@ -1,43 +1,60 @@
 @extends('layouts.app')
 
 @section('content')
+    @php
+        $item=\App\Model\Slider::all();
+        $i=0;
+        $j=0;
+    @endphp
     <div id="myCarousel" class="carousel slide" data-ride="carousel" >
         <ol class="carousel-indicators">
-            <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
-            <li data-target="#myCarousel" data-slide-to="1"></li>
-            <li data-target="#myCarousel" data-slide-to="2"></li>
+            @foreach($item as $value)
+                @if($i==0)
+                    <li data-target="#myCarousel" data-slide-to="{{$i}}" class="active"></li>
+
+                @else
+                    <li data-target="#myCarousel" data-slide-to="{{$i}}" ></li>
+
+                @endif
+
+                @php
+                    $i=$i+1;
+                @endphp
+            @endforeach
+
         </ol>
         <div class="carousel-inner">
-            <div class="carousel-item active">
-                <img class="bd-placeholder-img" width="100%" height="100%" src="{{asset('images/slider/1.jpg')}}" focusable="false" role="img">
-                <div class="container">
-                    <div class="carousel-caption text-left">
-                        <h1>Example headline.</h1>
-                        <p>Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
-                        <p><a class="btn btn-lg btn-primary" href="#" role="button">Sign up today</a></p>
+            @foreach($item as $value)
+
+                @if($j==0)
+                    <div class="carousel-item active">
+                        <img class="bd-placeholder-img" width="100%" height="100%" src="{{asset('images/slider/'.$value->image)}}" focusable="false" role="img">
+                        <div class="container">
+                            <div class="carousel-caption text-left">
+                                <h1>{{$value->title}}</h1>
+                                <p>{{$value->description}}</p>
+                            </div>
+                        </div>
                     </div>
-                </div>
-            </div>
-            <div class="carousel-item">
-                <img class="bd-placeholder-img" width="100%" height="100%" src="{{asset('images/slider/1.jpg')}}" focusable="false" role="img">
-                <div class="container">
-                    <div class="carousel-caption">
-                        <h1>Another example headline.</h1>
-                        <p>Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
-                        <p><a class="btn btn-lg btn-primary" href="#" role="button">Learn more</a></p>
+
+                @else
+                    <div class="carousel-item">
+                        <img class="bd-placeholder-img" width="100%" height="100%" src="{{asset('images/slider/'.$value->image)}}" focusable="false" role="img">
+                        <div class="container">
+                            <div class="carousel-caption text-left">
+                                <h1>{{$value->title}}</h1>
+                                <p>{{$value->description}}</p>
+                            </div>
+                        </div>
                     </div>
-                </div>
-            </div>
-            <div class="carousel-item">
-                <img class="bd-placeholder-img" width="100%" height="100%" src="{{asset('images/slider/1.jpg')}}" focusable="false" role="img">
-                <div class="container">
-                    <div class="carousel-caption text-right">
-                        <h1>One more for good measure.</h1>
-                        <p>Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
-                        <p><a class="btn btn-lg btn-primary" href="#" role="button">Browse gallery</a></p>
-                    </div>
-                </div>
-            </div>
+
+                @endif
+
+                @php
+                    $j=$j+1;
+                @endphp
+            @endforeach
+
         </div>
         <a class="carousel-control-prev" href="#myCarousel" role="button" data-slide="prev">
             <span class="carousel-control-prev-icon" aria-hidden="true"></span>
@@ -50,99 +67,28 @@
     </div>
 
 
-    <!-- Marketing messaging and featurettes
-    ================================================== -->
-    <!-- Wrap the rest of the page in another container to center all the content. -->
-
     <div class="container marketing">
-
+    @php
+        $getItem=\App\Model\Item::query()->limit(9)->where('approved','=','allowed')->get();
+    @endphp
         <!-- Three columns of text below the carousel -->
         <div class="row">
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 d-flex justify-content-center"><h1><strong>Featured Items</strong></h1></div>
-            <div class="col-lg-4">
-                <img class="bd-placeholder-img" width="340" height="340" src="{{asset('images/slider/1.jpg')}}" focusable="false" role="img" aria-label="Placeholder: 140x140"><title>Placeholder</title>
-                <h2>Heading</h2>
-                <p>Donec sed odio dui. Etiam porta sem malesuada magna mollis euismod. Nullam id dolor id nibh ultricies vehicula ut id elit. Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Praesent commodo cursus magna.</p>
-                <p><a class="btn btn-secondary" href="#" role="button">View details &raquo;</a></p>
-            </div><!-- /.col-lg-4 -->
-            <div class="col-lg-4">
-                <img class="bd-placeholder-img" width="340" height="340" src="{{asset('images/slider/1.jpg')}}" focusable="false" role="img" aria-label="Placeholder: 140x140"><title>Placeholder</title>
-                <h2>Heading</h2>
-                <p>Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit. Cras mattis consectetur purus sit amet fermentum. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh.</p>
-                <p><a class="btn btn-secondary" href="#" role="button">View details &raquo;</a></p>
-            </div><!-- /.col-lg-4 -->
-            <div class="col-lg-4">
-                <img class="bd-placeholder-img" width="340" height="340" src="{{asset('images/slider/1.jpg')}}" focusable="false" role="img" aria-label="Placeholder: 140x140"><title>Placeholder</title>
-                <h2>Heading</h2>
-                <p>Donec sed odio dui. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Vestibulum id ligula porta felis euismod semper. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.</p>
-                <p><a class="btn btn-secondary" href="#" role="button">View details &raquo;</a></p>
-            </div>
-            <div class="col-lg-4">
-                <img class="bd-placeholder-img" width="340" height="340" src="{{asset('images/slider/1.jpg')}}" focusable="false" role="img" aria-label="Placeholder: 140x140"><title>Placeholder</title>
-                <h2>Heading</h2>
-                <p>Donec sed odio dui. Etiam porta sem malesuada magna mollis euismod. Nullam id dolor id nibh ultricies vehicula ut id elit. Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Praesent commodo cursus magna.</p>
-                <p><a class="btn btn-secondary" href="#" role="button">View details &raquo;</a></p>
-            </div><!-- /.col-lg-4 -->
-            <div class="col-lg-4">
-                <img class="bd-placeholder-img" width="340" height="340" src="{{asset('images/slider/1.jpg')}}" focusable="false" role="img" aria-label="Placeholder: 140x140"><title>Placeholder</title>
-                <h2>Name</h2>
-                <p>Donec sed odio dui. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Vestibulum id ligula porta felis euismod semper. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.</p>
+            @foreach($getItem as $value)
 
-                <p><a class="btn btn-secondary" href="#" role="button">View details &raquo;</a></p>
-            </div><!-- /.col-lg-4 -->
-            <div class="col-lg-4">
-                <img class="bd-placeholder-img" width="340" height="340" src="{{asset('images/slider/1.jpg')}}" focusable="false" role="img" aria-label="Placeholder: 140x140"><title>Placeholder</title>
-                <h2>Heading</h2>
-                <p>Donec sed odio dui. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Vestibulum id ligula porta felis euismod semper. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.</p>
-                <p><a class="btn btn-secondary" href="#" role="button">View details &raquo;</a></p>
-            </div><!-- /.col-lg-4 -->
+                <div class="col-lg-4">
+                    <img class="bd-placeholder-img" width="340" height="340" src="{{asset('images/slider/'.$value->frontImage)}}" focusable="false" role="img" aria-label="Placeholder: 140x140"><title>Placeholder</title>
+                    <h2>{{$value->Piece_Title}}</h2>
+                    <p>{{$value->description}}</p>
+                    <p><a class="btn btn-secondary" href="{{route('item.frontShow',$value->id)}}" role="button">View details &raquo;</a></p>
+                </div>
+
+
+            @endforeach
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 d-flex justify-content-center"><a class="btn btn-secondary " href="#" role="button">View All &raquo;</a></div>
         </div><!-- /.row -->
 
 
-        <!-- START THE FEATURETTES -->
-
-        <hr class="featurette-divider">
-        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 d-flex justify-content-center"><h1><strong>Auction Details</strong></h1></div>
-
-        <div class="row featurette">
-            <div class="col-md-7">
-                <h2 class="featurette-heading">First featurette heading. <span class="text-muted">It’ll blow your mind.</span></h2>
-                <p class="lead">Donec ullamcorper nulla non metus auctor fringilla. Vestibulum id ligula porta felis euismod semper. Praesent commodo cursus magna, vel scelerisque nisl consectetur. Fusce dapibus, tellus ac cursus commodo.</p>
-            </div>
-            <div class="col-md-5">
-                <img class="bd-placeholder-img" width="500" height="500" src="{{asset('images/slider/1.jpg')}}" focusable="false" role="img" aria-label="Placeholder: 140x140"><title>Placeholder</title>
-
-            </div>
-        </div>
-
-        <hr class="featurette-divider">
-
-        <div class="row featurette">
-            <div class="col-md-7 order-md-2">
-                <h2 class="featurette-heading">Oh yeah, it’s that good. <span class="text-muted">See for yourself.</span></h2>
-                <p class="lead">Donec ullamcorper nulla non metus auctor fringilla. Vestibulum id ligula porta felis euismod semper. Praesent commodo cursus magna, vel scelerisque nisl consectetur. Fusce dapibus, tellus ac cursus commodo.</p>
-            </div>
-            <div class="col-md-5 order-md-1">
-                <img class="bd-placeholder-img" width="450" height="450" src="{{asset('images/slider/1.jpg')}}" aria-label="Placeholder: 500x500">
-
-            </div>
-        </div>
-
-        <hr class="featurette-divider">
-
-        <div class="row featurette">
-            <div class="col-md-7">
-                <h2 class="featurette-heading">And lastly, this one. <span class="text-muted">Checkmate.</span></h2>
-                <p class="lead">Donec ullamcorper nulla non metus auctor fringilla. Vestibulum id ligula porta felis euismod semper. Praesent commodo cursus magna, vel scelerisque nisl consectetur. Fusce dapibus, tellus ac cursus commodo.</p>
-            </div>
-            <div class="col-md-5">
-                <img class="bd-placeholder-img" width="500" height="500" src="{{asset('images/slider/1.jpg')}}" focusable="false" role="img" aria-label="Placeholder: 140x140"><title>Placeholder</title>
-
-            </div>
-        </div>
-
-        <hr class="featurette-divider">
 
         <!-- /END THE FEATURETTES -->
 
