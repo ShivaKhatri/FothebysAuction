@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Backend;
 
 use App\DataTables\AuctionDatatable;
+use App\DataTables\AuctionedDataTable;
 use App\Model\Auction;
 use App\Model\Category;
 use App\Model\Item;
@@ -30,6 +31,7 @@ class AuctionController extends Controller
 
 
     }
+
     /**
      * Show the form for creating a new resource.
      *
@@ -57,26 +59,22 @@ class AuctionController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request)//stores the data passed from the create auction form
     {
         $getAuction=Auction::all();
         $num=count($getAuction);
-//        foreach ($count as $get){
-//
-//                dd($get->date);
-//
-//
-//            }
+        //checks if the session has been already assigned to a previous auction
         foreach ($getAuction as $get){
             if($get->date==$request->date){
                 if($get->session==$request->sessionAuction & $get->location==$request->location){
 //                    dd($request->location);
 
-                    return redirect('auction/create')->with('message', 'The selected session is already assigned to auction lot: '.$get->lotNumber);
+                    return redirect()->back()->with('message', 'The selected session is already assigned to auction lot: '.$get->lotNumber);
 
                 }
             }
         }
+        //creates a new auction
         $auction=new Auction();
         $auction->themeName=$request->theme;
         $auction->Auction_Title=$request->Auction_Title;
@@ -89,7 +87,7 @@ class AuctionController extends Controller
             else {
 //                dd($request->status);
                 if($request->status==1)
-                    return redirect('auction/create')->with('message', 'The category dosen\'t have enough items to be on a auction');
+                    return redirect()->back()->with('message', 'The category dosen\'t have enough items to be on a auction');
 
                 $auction->status=0;
 
@@ -103,7 +101,7 @@ class AuctionController extends Controller
             } else {
 
                 if($request->status==1)
-                    return redirect('auction/create')->with('message', 'The Artist dosen\'t have enough items !');
+                    return redirect()->back()->with('message', 'The Artist dosen\'t have enough items !');
 
                 $auction->status=0;
 
@@ -279,7 +277,7 @@ class AuctionController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function sendMail($id){
+    public function sendMail($id){//to send email to users when their items have been verified
         $itemAuctoin=Auction::find($id)->item()->get();
         $auction=Auction::find($id);
         foreach ($itemAuctoin as $get) {
@@ -292,35 +290,26 @@ class AuctionController extends Controller
             $newdate = date('Y-m-d', $newdate);
             $price = $get->estimated_price_from * (5 / 100);
 
-            $body = "Date: " . $date . "
-
-                        Dear " . $client->FirstName . ",
-                        
-                        We are pleased to inform you that your piece, " . $get->PieceTitle . ", has been scheduled for sale at our auction house in " . $auction->location . " on " . $auction->date . ".
+            $body = "We are pleased to inform you that your piece, " . $get->PieceTitle . ", has been scheduled for sale at our auction house in " . $auction->location . " on " . $auction->date . ".
                         
                         May I take this opportunity to remind you that should you wish to withdraw your item from the sale, you must notify this department by " . $newdate . ". Any requests to withdraw the piece form sale after the stated deadline will result in a fee equivalent to 5% of the lower estimated price for your piece, this being £ " . $price . ", in line with your original sale agreement.    
                         
                         May I also take this opportunity again to thank you for using Fotherby’s auction house, as we seek to achieve the best possible selling price for your item.
-                        
-                        Yours Sincerely,
-                        
-                        
-                        Mr M Fotherby
                         ";
 
             $data = array('name' => $name, "body" => $body);
 
             Mail::send('backend.mail.mail', $data, function ($message) use ($name, $email) {
-                $message->from('shivakhatri665@gmail.com', 'Shiva');
+                $message->from('shivakhatri665@gmail.com', 'Fotheby');
 
-                $message->to($email, $name)->subject('Your Reminder!');
+                $message->to($email, $name)->subject('Item Confirmed!');
             });
         }
 
     }
 
 
-    public function update(Request $request, $id)
+    public function update(Request $request, $id)//to update the auction data
     {
         $countArtist = Item::query()->where('artists', 'LIKE', "%{$request->themeValue}%" )->where('approved', '=', 'allowed')->count();
         $count = Item::query()->where('category_id', '=', $request->themeValue)->where('approved', '=', 'allowed')->count();
@@ -342,7 +331,6 @@ class AuctionController extends Controller
         }
         $auction=Auction::find($id);
         $auction->themeName=$request->theme;
-        $auction->Auction_Title=$request->Auction_Title;
         $auction->lotNumber=$num;
         if($request->theme=='Category') {
 //            $count =0;
@@ -443,12 +431,34 @@ class AuctionController extends Controller
         }
 
 
+        $itemAuctoin=Auction::find($id)->item()->get();
+        $auction=Auction::find($id);
+        foreach ($itemAuctoin as $get) {
+            $Cid = $get->client_id;
+            $client = User::find($Cid);
+            $name = $client->FirstName;
+            $email = $client->email;
+            $body = "We are sad to inform you that the auction your piece, " . $get->PieceTitle . ", was scheduled to be sold at " . $auction->location . " on " . $auction->date . ".
+                        
+                        has been canceled";
+
+            $data = array('name' => $name, "body" => $body);
+
+            Mail::send('backend.mail.mail', $data, function ($message) use ($name, $email) {
+                $message->from('shivakhatri665@gmail.com', 'Fotheby');
+
+                $message->to($email, $name)->subject('Item Confirmed!');
+            });
+        }
+
         Auction::destroy($id);//deletes the item whose item matches the given id
+
         return response()->json([
             'success' => 'Record deleted successfully!'
         ]);
     }
 
+    //checks if the given id exists or not
     public function checkId($id)
     {
         $query = Auction::all();
@@ -458,6 +468,8 @@ class AuctionController extends Controller
         return $this->model;
     }
 
+
+    //if category is selected The category select input will be sent to jeason and if the artist is selected the input for artist name is recorded
     public function theme($id)
     {
 //        dd($id);foreach (array_expression as $key => $value)
@@ -473,7 +485,7 @@ class AuctionController extends Controller
                             <label for="type" class="control-label col-md-3 col-sm-3 col-xs-12" >Category</label>
 
                             <div class="col-md-6 col-sm-6 col-xs-12">
-                            <select class="form-control category" name="themeValue" >
+                            <select class="form-control category" name="themeValue" id="forCategory" >
                                                         <option value="">Select Category</option>
 
                                '.$web.'
@@ -486,7 +498,7 @@ class AuctionController extends Controller
                             <label for="type" class="control-label col-md-3 col-sm-3 col-xs-12" >Artists Name</label>
 
                             <div class="col-md-6 col-sm-6 col-xs-12">
-                            <input type="text" class="form-control artists" name="themeValue">
+                            <input type="text" class="form-control artists " name="themeValue" id="forArtist">
                             </div>
                         </div>
                         ';
@@ -497,6 +509,9 @@ class AuctionController extends Controller
         return json_encode($html);
     }
 
+
+    //when the category is selected its id is sent through ajax and here the items that are approved and
+    // are assigned to the selected category will be sent
     public function ajax($id)
     {
 //        $category= Category::find($id)->get()->pluck('name','id');
@@ -517,13 +532,15 @@ class AuctionController extends Controller
                     <p class="card-text"> Piece Title:'. $get->Piece_Title.'<br>Lot Reference Number: '. $get->lotReferenceNumber.'<br>Artist: '.$get->artists.'</p>
                     <a href="'.route("item.show",$get->id).'" class="btn btn-primary">View Item</a>
                   </div>&nbsp;&nbsp;
-</div></div>';
+                </div></div>';
         }
         $html=$html.'</div>';
 
 //        dd($detail);
         return json_encode($html);
     }
+    //if the artist is selected the name of the artist is passed onto the function and the items that are approved
+    // and are made by the the passed artist are selected and sent through json
     public function artists($id)
     {
         //selects items which is verified and whose artists name matches with the given value($id)
@@ -550,6 +567,8 @@ class AuctionController extends Controller
         return json_encode($html);
     }
 
+
+    //this is for the edit page, here the id of the item and the category id are sent
     public function themeEdit($use,$id)
     {
 //        dd($id);foreach (array_expression as $key => $value)
@@ -595,6 +614,8 @@ class AuctionController extends Controller
         return json_encode($html);
     }
 
+
+    //here the id of the selected category and item id is sent
     public function ajaxEdit($use,$id)
     {
 
@@ -627,6 +648,9 @@ else
         return json_encode($html);
     }
 
+
+
+    //here the selected artist name and the item id is sent
     public function artistEdit($use,$id)
     {
 //        dd('here');

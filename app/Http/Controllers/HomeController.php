@@ -1,7 +1,7 @@
 <?php
-
 namespace App\Http\Controllers;
 
+use App\DataTables\UpComingAuctionDataTable;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -23,26 +23,49 @@ class HomeController extends Controller
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
+
     public function index()
     {
         $Cstatus=Auth::user()->Cstatus;
         if ($Cstatus=='Admin') {
             return view('backend/Users/admin')->with('Cstatus',$Cstatus);
+
         }
+
         elseif ($Cstatus=='Seller'){
-            return view('backend/Users/seller')->with('Cstatus',$Cstatus);
+            return redirect('UpComingSellerAuction');
 
         }
         elseif ($Cstatus=='Buyer'){
-            return view('backend/Users/buyer')->with('Cstatus',$Cstatus);
+            return redirect('UpComingBuyerAuction');
 
         }
         elseif ($Cstatus=='Both'){
-            return view('backend/Users/both')->with('Cstatus',$Cstatus);
+            return redirect('UpComingBothAuction');
 
         }
         else{
-            return redirect('/');
+            return redirect('UpComingGuestAuction');
         }
     }
+
+
+    public function sellerAuction(UpComingAuctionDataTable $datatable)
+    {
+        return $datatable->render('backend/Users/seller');
+    }
+    public function buyerAuction(UpComingAuctionDataTable $dataTable)
+    {
+        return $dataTable->render('backend/Users/buyer');
+    }
+    public function bothAuction(UpComingAuctionDataTable $dataTable)
+    {
+        return $dataTable->render('backend/Users/both');
+    }
+    public function guestAuction(UpComingAuctionDataTable $dataTable)
+    {
+        return $dataTable->render('backend/Users/buyer');
+    }
+
 }
+?>

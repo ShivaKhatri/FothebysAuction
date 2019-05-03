@@ -60,7 +60,24 @@
                 <i class="fas fa-fw fa-tachometer-alt"></i>
                 <span>Dashboard</span></a>
         </li>
+        <!-- Divider -->
+        <hr class="sidebar-divider">
 
+        <!-- Heading -->
+        <div class="sidebar-heading">
+            Auction
+        </div>
+        <!-- Nav Item - Charts -->
+        <li class="nav-item">
+            <a class="nav-link" href="{{route('auction.index')}}">
+                <i class="fas fa-cogs"></i>
+                <span>Auction Setting</span></a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{{route('auctioned.index')}}">
+                <i class="fab fa-sellcast"></i>
+                <span>Auctioneer Table</span></a>
+        </li>
         <!-- Divider -->
         <hr class="sidebar-divider">
 
@@ -72,7 +89,7 @@
         <!-- Nav Item - Pages Collapse Menu -->
         <li class="nav-item">
             <a class="nav-link collapsed" href="#collapseTwo" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
-                <i class="fas fa-fw fa-cog"></i>
+                <i class="fa fa-list-alt"></i>
                 <span>Categories</span>
             </a>
             <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
@@ -85,21 +102,21 @@
         </li>
         <li class="nav-item">
             <a class="nav-link" href="{{route('classification.index')}}">
-                <i class="fas fa-fw fa-chart-area"></i>
+                <i class="fas fa-align-justify"></i>
                 <span>classification</span></a>
         </li>
 
         <!-- Nav Item - Utilities Collapse Menu -->
         <li class="nav-item">
             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities" aria-expanded="true" aria-controls="collapseUtilities">
-                <i class="fas fa-fw fa-wrench"></i>
+                <i class="fas fa-palette"></i>
                 <span>Items</span>
             </a>
             <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
                 <div class="bg-white py-2 collapse-inner rounded">
                     <h6 class="collapse-header">Item Details:</h6>
                     <a class="collapse-item" href="{{route('item.index')}}">Items</a>
-                    <a class="collapse-item" href="#">Auctioned Items</a>
+                    <a class="collapse-item" href="{{route('auctioned.auctionedItem')}}">Auctioned Items</a>
                     <a class="collapse-item" href="#">Items Up For Auction</a>
 
                     <h6 class="collapse-header">Item Status:</h6>
@@ -120,7 +137,7 @@
         </div>
         <li class="nav-item">
             <a class="nav-link collapsed" href="#collapseCommision" data-toggle="collapse" data-target="#collapseCommision" aria-expanded="true" aria-controls="collapseCommision">
-                <i class="fas fa-fw fa-wrench"></i>
+                <i class="fas fa-money-bill-wave"></i>
                 <span>Commission Bid</span>
             </a>
             <div id="collapseCommision" class="collapse" aria-labelledby="collapseCommision" data-parent="#accordionSidebar" >
@@ -142,7 +159,7 @@
         <!-- Nav Item - Pages Collapse Menu -->
         <li class="nav-item">
             <a class="nav-link collapsed" href="#collapseCustomers" data-toggle="collapse" data-target="#collapseCustomers" aria-expanded="true" aria-controls="collapseCustomers">
-                <i class="fas fa-fw fa-wrench"></i>
+                <i class="fas fa-users-cog"></i>
                 <span>Users</span>
             </a>
             <div id="collapseCustomers" class="collapse" aria-labelledby="headingCustomers" data-parent="#accordionSidebar" >
@@ -158,7 +175,7 @@
         <!-- Nav Item - Pages Collapse Menu -->
         <li class="nav-item">
             <a class="nav-link collapsed" href="#collapseUsers" data-toggle="collapse" data-target="#collapseUsers" aria-expanded="true" aria-controls="collapseUsers">
-                <i class="fas fa-fw fa-wrench"></i>
+                <i class="fas fa-users"></i>
                 <span>Users Status</span>
             </a>
             <div id="collapseUsers" class="collapse" aria-labelledby="headingUsers" data-parent="#accordionSidebar" >
@@ -170,24 +187,7 @@
                 </div>
             </div>
         </li>
-        <!-- Divider -->
-        <hr class="sidebar-divider">
 
-        <!-- Heading -->
-        <div class="sidebar-heading">
-            Auction
-        </div>
-        <!-- Nav Item - Charts -->
-        <li class="nav-item">
-            <a class="nav-link" href="{{route('auction.index')}}">
-                <i class="fas fa-fw fa-chart-area"></i>
-                <span>Auction Setting</span></a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="{{route('auctioned.index')}}">
-                <i class="fas fa-fw fa-chart-area"></i>
-                <span>Auctioneer Table</span></a>
-        </li>
 
         <!-- Divider -->
         <hr class="sidebar-divider">
@@ -199,7 +199,7 @@
         <!-- Nav Item - Charts -->
         <li class="nav-item">
             <a class="nav-link" href="{{route('slider.index')}}">
-                <i class="fas fa-fw fa-chart-area"></i>
+                <i class="fas fa-cog"></i>
                 <span>Slider Setting</span></a>
         </li>
 
@@ -254,7 +254,7 @@
                     <li class="nav-item dropdown no-arrow">
                         <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <span class="mr-2 d-none d-lg-inline text-gray-600 small">{{Auth::user()->FirstName}} {{Auth::user()->Surname}}</span>
-                            <img class="img-profile rounded-circle" src="https://source.unsplash.com/QAB-WJcbgJk/60x60">
+                            <img class="img-profile rounded-circle" src="{{asset('images/default-user.jpg')}}">
                         </a>
                         <!-- Dropdown - User Information -->
                         <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">

@@ -13,7 +13,7 @@ class CategoryDatatable extends DataTable
      * @param mixed $query Results from query() method.
      * @return \Yajra\DataTables\DataTableAbstract
      */
-    public function dataTable($query)
+    public function dataTable($query)//to show the details of the category
     {
         return datatables($query)
             ->addColumn('admin', function ($category) {

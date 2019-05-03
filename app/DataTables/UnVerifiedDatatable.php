@@ -14,7 +14,7 @@ class UnVerifiedDatatable extends DataTable
      * @param mixed $query Results from query() method.
      * @return \Yajra\DataTables\DataTableAbstract
      */
-    public function dataTable($query)
+    public function dataTable($query)//to show the details of the unverified users of the system
     {
         return datatables($query)
             ->addColumn('Added_By', function ($user) {

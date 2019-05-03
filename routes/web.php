@@ -61,6 +61,7 @@ Route::get('limit/buyer/{id}', 'Backend\CommisionBidController@limit')->name('co
 Route::PUT('limit/buyer/{id}', 'Backend\CommisionBidController@updateLimit')->name('commission.updateLimit');
 
 Route::get('auctioned/auctioneer/{id}', 'Backend\AuctionedController@auctioneer')->name('auctioned.auctioneer');
+Route::get('auctioned/item', 'Backend\AuctionedController@auctionedItem')->name('auctioned.auctionedItem');
 Route::resource('auctioned','Backend\AuctionedController');
 
 Route::resource('auction','Backend\AuctionController');
@@ -74,6 +75,13 @@ Route::get('auction/{use}/theme/{id}', 'Backend\AuctionController@themeEdit')->n
 
 
 
+Route::get('UpComingSellerAuction', 'HomeController@sellerAuction')->name('auction.sellerAuction');
+Route::get('UpComingBuyerAuction', 'HomeController@buyerAuction')->name('auction.buyerAuction');
+Route::get('UpComingBothAuction', 'HomeController@bothAuction')->name('auction.bothAuction');
+Route::get('UpComingGuestAuction', 'HomeController@guestAuction')->name('auction.guestAuction');
+
+
+
 
 
 Route::get('/seller', function () {
@@ -82,4 +90,7 @@ Route::get('/seller', function () {
 Route::get('/buyers', function () {
     return view('frontend/buyer');
 })->name('buyer');
+Route::get('/terms', function () {
+    return view('termsAndServices');
+})->name('terms');
 

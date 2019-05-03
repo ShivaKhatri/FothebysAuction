@@ -9,7 +9,7 @@
         <div class="row justify-content-center">
             <div class="col-md-12">
                 <div class="card">
-                    <div class="card-header">{{ __('Auction Table') }}</div>
+                    <div class="card-header">{{ __('Auctions Table') }}</div>
 
                     <div class="card-body">
                         {!! $dataTable->table(['class' => 'table table-striped ']) !!}

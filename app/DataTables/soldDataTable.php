@@ -17,20 +17,27 @@ class soldDataTable extends DataTable
      */
     public function dataTable($query)
     {
-        return datatables($query)
+        return datatables($query)//to show the details of the item sold by the client
             ->addColumn('action', function ($detail) {
                 $item=Item::find($detail->id);
                 $auction=$item->auction()->first();
+                if($auction!=null){
 
-                if($auction->sold==null)
-                return '<a href="'.route('item.show',$detail->id).'" class="btn btn-sm btn-success" style="margin:3px">
+                    if($auction->sold==null)
+                        return '<a href="'.route('item.show',$detail->id).'" class="btn btn-sm btn-success" style="margin:3px">
                          Show</a><a href="'.route('item.edit',$detail->id).'" class="btn btn-sm btn-primary" style="margin:3px">
                         <i class="glyphicon glyphicon-edit"></i> Edit</a>&nbsp;&nbsp;<a href="'.route('item.destroy',$detail->id).'" class="btn btn-sm btn-danger" id="delete" ><i class="glyphicon glyphicon-remove"></i> Delete</a>';
-           else
-               return '<a href="'.route('item.show',$detail->id).'" class="btn btn-sm btn-success" style="margin:3px">
-                         Show</a><a href="'.route('item.edit',$detail->id).'" class="btn btn-sm btn-primary" style="margin:3px">
-                        <i class="glyphicon glyphicon-edit"></i> Edit</a>';
+                    else
+                        return '<a href="'.route('item.show',$detail->id).'" class="btn btn-sm btn-success" style="margin:3px">
+                         Show</a>';
 
+                }
+                else{
+                    return '<a href="'.route('item.show',$detail->id).'" class="btn btn-sm btn-success" style="margin:3px">
+                         Show</a><a href="'.route('item.edit',$detail->id).'" class="btn btn-sm btn-primary" style="margin:3px">
+                        <i class="glyphicon glyphicon-edit"></i> Edit</a>&nbsp;&nbsp;<a href="'.route('item.destroy',$detail->id).'" class="btn btn-sm btn-danger" id="delete" ><i class="glyphicon glyphicon-remove"></i> Delete</a>';
+
+                }
 
             })
             ->addColumn('Auction_Date', function ($detail) {
@@ -62,15 +69,16 @@ class soldDataTable extends DataTable
                 }
                 return $wow;
             })
-            ->editColumn('sold', function($item) {
-                if($item->sold==null){
+            ->addColumn('Sold_At', function($item) {
+                $getItem=Item::find($item->id);
+                if($getItem==null){
                     return 'Not Sold';
 
                 }
                 else
-                    return  $item->sold ;
+                    return  '<b>'.$getItem->sold.'</b>';
             })
-            ->rawColumns(['status','sold','Auction_Date','action']);
+            ->rawColumns(['status','Sold_At','Auction_Date','action']);
 
     }
 
@@ -83,7 +91,7 @@ class soldDataTable extends DataTable
     public function query(Item $model)
     {
         $id=Auth::user()->id;
-        return $model->newQuery()->select('id','lotReferenceNumber', 'sold','estimated_price_from', 'estimated_price_to', 'reservePrice')->where('client_id','=',$id);
+        return $model->newQuery()->select('id','lotReferenceNumber','estimated_price_from', 'estimated_price_to', 'reservePrice')->where('client_id','=',$id);
 
     }
 
@@ -95,10 +103,10 @@ class soldDataTable extends DataTable
     public function html()
     {
         return $this->builder()
-                    ->columns($this->getColumns())
-                    ->minifiedAjax()
-                    ->addAction(['width' => '180px'])
-                    ->parameters($this->getShowParameters());
+            ->columns($this->getColumns())
+            ->minifiedAjax()
+            ->addAction(['width' => '180px'])
+            ->parameters($this->getShowParameters());
     }
 
     /**
@@ -110,7 +118,7 @@ class soldDataTable extends DataTable
     {
         return [
             'lotReferenceNumber',
-            'sold',
+            'Sold_At',
             'status',
             'estimated_price_from',
             'estimated_price_to',

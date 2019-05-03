@@ -16,6 +16,7 @@
         <p class="card-text">Email:{{$user->email}}</p>
         <p class="card-text">Telephone Number:{{$user->phone_no}}</p>
         <p class="card-text">Address:{{$user->address}}</p>
+        @if($user->Cstatus!="Admin")
         <p class="card-text">Commission Bid Limit:{{$user->bidLimit}}</p>
         <h5 class="card-title">Bank Details </h5>
         <p class="card-text">
@@ -27,6 +28,7 @@
             <h5 class="card-title">Verified By</h5>
             <p class="card-text">{{$verified_by->FirstName}} {{$verified_by->Surname}}</p>
         </div>
+           @endif
         </div>
 </div>
     </div>

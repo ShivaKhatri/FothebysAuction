@@ -13,7 +13,7 @@ class DetailDatatable extends DataTable
      * @param mixed $query Results from query() method.
      * @return \Yajra\DataTables\DataTableAbstract
      */
-    public function dataTable($query)
+    public function dataTable($query)//to show the additional details of an item based on category
     {
         return datatables($query)
             ->addColumn('Added_By', function ($detail) {

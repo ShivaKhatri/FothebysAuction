@@ -13,12 +13,12 @@
 
                     <div class="card-body">
                         {!! Form::model($item, [
-      'route' => ['item.update', $item->id],
-      'class' =>"form-horizontal form-label-left",
-      'method' => 'PUT',
-      'id' => 'userForm',
-      'enctype' => "multipart/form-data",
-  ])
+                          'route' => ['item.update', $item->id],
+                          'class' =>"form-horizontal form-label-left",
+                          'method' => 'PUT',
+                          'id' => 'userForm',
+                          'enctype' => "multipart/form-data",
+                      ])
   !!}
                         @csrf
                         @if($image!=null)
@@ -52,9 +52,10 @@
 
                             }
                         @endphp
-                        <div class="card-title">Reserve Price: {{$item->reservePrice}}</div>
                         <div class="card-title">Category: {{$category->name}}</div>
-                        <div class="card-title">Provenance Details: <a href="{{asset('/images/item/'.$item->provenance_details)}}">Link for the Image</a></div>
+                        <div class="card-title">Provenance Details:{{$item->provenance_details}}</div>
+                        <div class="card-title">Damage: {{$item->damage}}</div>
+                        <div class="card-title">Markings: {{$item->markings}}</div>
                         @php
                             if(!($SubCategory==null)){
                                                    echo '<div class="card-title">Sub Category: '.$SubCategory->name.'</div>';
@@ -66,6 +67,13 @@
                             <input name="item_id" type="number" value="{{$item->id}}" hidden>
                         </div>
                         {!! $html!!}
+                        <div class="form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12" >Agreed Reserve Price<span class="required">*</span>
+                            </label>
+                            <div class="col-md-8 col-sm-8 col-xs-12 row">
+                                {{ Form::number('reservePrice',$item->reservePrice, array('class' => 'form-control col-md-5 col-xs-12','required'=>'')) }}
+                            </div>
+                        </div>
                         <div class="form-group">
                             <label class="control-label col-md-3 col-sm-3 col-xs-12" >Estimated Price<span class="required">*</span>
                             </label>

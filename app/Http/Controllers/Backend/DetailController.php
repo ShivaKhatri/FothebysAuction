@@ -65,6 +65,7 @@ class DetailController extends Controller
         for ($i=0; $i<$request->number; $i++) {
             $value='Valuename'.$i;
 //            dd($value);
+            //if the detail has only one value then assign the details name to detail_value name
             if($request->Valuename0=="null"){
                 $detail_value = new Detail_value();
                 $detail_value->name = 'null';
@@ -176,10 +177,11 @@ class DetailController extends Controller
                 'success' => 'Record not deleted!'
             ]);
         }
+//assigns item value with detail item model
+        $item_value=DB::table('detail_values');
+        //deletes the row whose item id matches with the $id
 
-        $item_value=DB::table('detail_values');//assigns item value with detail item model
-        $item_value->where('detail_id','=',$id)->delete();//deletes the row whose item id matches with the $id
-
+        $item_value->where('detail_id','=',$id)->delete();
         Detail::destroy($id);//deletes the item whose item matches the given id
         return response()->json([
             'success' => 'Record deleted successfully!'
@@ -195,16 +197,12 @@ class DetailController extends Controller
         return $this->model;
     }
 
+
+    //gets the number from the form and then creates the  input forms according to that number
     public function number($id)
     {
 
         $html='';
-
-//        for ($i=0; $i < $id; $i++){
-//            $html=$html. ' this';
-//            return json_encode($html);
-//
-//        }
 
         for ($i=0; $i<$id; $i++){
             if($id==1){

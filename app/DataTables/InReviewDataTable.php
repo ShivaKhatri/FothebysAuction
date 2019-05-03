@@ -14,7 +14,7 @@ class InReviewDataTable extends DataTable
      * @param mixed $query Results from query() method.
      * @return \Yajra\DataTables\DataTableAbstract
      */
-    public function dataTable($query)
+    public function dataTable($query)// to show item that are in review process
     {
         return datatables($query)
             ->addColumn('action', function ($detail) {

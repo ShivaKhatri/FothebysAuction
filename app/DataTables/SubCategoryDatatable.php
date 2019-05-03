@@ -14,7 +14,7 @@ class SubCategoryDatatable extends DataTable
      * @param mixed $query Results from query() method.
      * @return \Yajra\DataTables\DataTableAbstract
      */
-    public function dataTable($query)
+    public function dataTable($query)//to show the details of the sub category of the items
     {
         return datatables($query)
             ->addColumn('admin', function ($category) {

@@ -54,7 +54,7 @@
                 type: "DELETE",
                 url: $this.attr('href')
             }).done(function (data) {
-                window.location.replace('/items');
+                window.location.replace('/item');
             });
         });
     </script>

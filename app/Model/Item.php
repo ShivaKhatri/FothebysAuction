@@ -5,7 +5,7 @@ namespace App\Model;
 use Illuminate\Database\Eloquent\Model;
 
 class Item extends Model
-{
+{//the attributes that can be filled in this table
     protected $fillable = [
         'artists',
         'Piece_Title',
@@ -25,6 +25,9 @@ class Item extends Model
         'client_id',
         'authenticated',
         'provenance_details',
+        'damage',
+        'markings',
+        'published',
         'customer_agreement',
         'expert_id',
         'auction_id',
@@ -38,6 +41,8 @@ class Item extends Model
         'signed_date',
         'auctioneer_comment'
     ];
+
+    //the one to many relation of this model
     public function admin()
     {
         return $this->belongsTo('App\User','expert_id');

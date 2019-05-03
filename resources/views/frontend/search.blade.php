@@ -63,7 +63,7 @@
 
         <!-- Heading -->
         <div class="sidebar-heading">
-            Artist
+            Search
         </div>
         <!-- Nav Item - Charts -->
         <li class="nav-item">
@@ -258,10 +258,11 @@
 
                                         @endphp
                                         <div class="card-title">Reserve Price: {{$ivalue->reservePrice}}</div>
+                                        <div class="card-title">Estimated: {{$ivalue->estimated_price_from}} to {{$ivalue->estimated_price_to}}</div>
                                         <div class="card-title">Category: {{$category->name}}</div>
                                         <div class="card-title">Provenance Details: <a href="{{asset('/images/item/'.$ivalue->provenance_details)}}">Link for the Image</a></div>
                                         <div class="card-title">Classification: {{$classification->name}}</div>
-                                        <img src="{{$ivalue->frontImage}}" class="card-img-bottom">
+                                        <img src="{{asset('/images/item/'.$ivalue->frontImage)}}" class="card-img-bottom">
 
                                     </div>
                                     <div class="card-footer">

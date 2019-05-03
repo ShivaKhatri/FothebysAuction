@@ -14,14 +14,19 @@ class CustomerDatatable extends DataTable
      * @param mixed $query Results from query() method.
      * @return \Yajra\DataTables\DataTableAbstract
      */
-    public function dataTable($query)
+    public function dataTable($query)//to show the data of all customers registered as buyers and sellers and both
     {
         return datatables($query)
             ->addColumn('verified_by', function ($user) {
                 $get=User::find($user->id);
+                $admin = User::find($get->verified_by);
 
-                $admin=User::find($get->verified_by);
-                $wow='<b>'.$admin->FirstName.' '.$admin->Surname.'</b>';
+                if($admin!=null) {
+                    $wow = '<b>' . $admin->FirstName . ' ' . $admin->Surname . '</b>';
+                }
+                else
+                    $wow='<b>Super Admin</b>';
+
 
                 return $wow;
             })
@@ -29,15 +34,20 @@ class CustomerDatatable extends DataTable
                 $get=User::find($user->id);
 
                 $admin=User::find($get->added_by);
+                if($admin!=null) {
                 $wow='<b>'.$admin->FirstName.' '.$admin->Surname.'</b>';
-
+            }
+                else
+                    $wow='<b>Super Admin</b>';
                 return $wow;
             })
             ->addColumn('User_Type', function ($user) {
                 $get=User::find($user->id);
-
+                if($get!=null) {
                 $wow='<b>'.$get->Cstatus.'</b>';
-
+                }
+                else
+                    $wow='<b>Super Admin</b>';
                 return $wow;
             })
             ->addColumn('action', function ($users) {
@@ -62,7 +72,7 @@ class CustomerDatatable extends DataTable
      */
     public function query(User $model)
     {
-        return $model->newQuery()->select('id', DB::raw('CONCAT(FirstName," ", Surname ) AS name'), 'email', 'phone_no')->where('Cstatus','=','Buyer')->orWhere('Cstatus','=','Seller')->orWhere('Cstatus','=','Both')->where('Astatus','=','verified');
+        return $model->newQuery()->select('id', DB::raw('CONCAT(FirstName," ", Surname ) AS name'), 'email', 'phone_no')->where('Astatus','=','verified')->where('Cstatus','!=','Admin');
 
     }
 

@@ -77,7 +77,7 @@
             @foreach($getItem as $value)
 
                 <div class="col-lg-4">
-                    <img class="bd-placeholder-img" width="340" height="340" src="{{asset('images/slider/'.$value->frontImage)}}" focusable="false" role="img" aria-label="Placeholder: 140x140"><title>Placeholder</title>
+                    <img class="bd-placeholder-img" width="340" height="340" src="{{asset('images/item/'.$value->frontImage)}}" focusable="false" role="img" aria-label="Placeholder: 140x140"><title>Placeholder</title>
                     <h2>{{$value->Piece_Title}}</h2>
                     <p>{{$value->description}}</p>
                     <p><a class="btn btn-secondary" href="{{route('item.frontShow',$value->id)}}" role="button">View details &raquo;</a></p>

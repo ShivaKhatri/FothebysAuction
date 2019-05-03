@@ -5,7 +5,7 @@ namespace App\Model;
 use Illuminate\Database\Eloquent\Model;
 
 class SubCategory extends Model
-{
+{//the attributes that can be filled in this table
     protected $fillable = [
         'name', 'description', 'admin_id','category_id'
     ];
@@ -13,6 +13,7 @@ class SubCategory extends Model
     {
         return $this->belongsTo('App\User','admin_id');
     }
+    //the one to many relation of this model
     public function category()
     {
         return $this->belongsTo('App\Model\Category','category_id');

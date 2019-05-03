@@ -28,7 +28,7 @@
                             </div>
                         </div>
                         <div   class="form-group ">
-                            <label for="type" class="control-label col-md-3 col-sm-3 col-xs-12" >{{ __('Category') }}</label>
+                            <label for="type" class="control-label col-md-3 col-sm-3 col-xs-12" >{{ __('Select Theme') }}</label>
 
                             <div class="col-md-6 col-sm-6 col-xs-12">
                                 {{ Form::select('theme',['Category'=>'Category','artists'=>'Artist'],$auction->themeName,['class'=>'form-control','id'=>'theme','required'=>'', 'placeholder'=>'Select Theme']) }}
@@ -89,7 +89,58 @@
 
 @section('scripts')
     <script type="text/javascript">
+        var name = $('select[name="theme"]').val();
+        console.log(name);
+        $.ajax({
+            url: 'theme/'+name,
+            type: "GET",
+            dataType: "json",
+            success:function(data) {
+
+                // console.log(data);
+
+                $('#additionalDetail').html(data);
+            }
+        });
+
+                @if($auction->themeName=='artists')
+                    var themeValue = '{{$auction->themeValue}}';
+
+                    console.log(themeValue);
+                    if (themeValue) {
+                        $.ajax({
+                            url: 'artists/' + themeValue,
+                            type: "GET",
+                            dataType: "json",
+                            success: function (data) {
+                                $('#items').html(data);
+
+                            }
+
+                        });
+                    }
+                @else
+        var categoryId = '{{$auction->themeValue}}';
+
+        console.log(categoryId);
+        if (categoryId) {
+            $.ajax({
+                url: 'ajax/' + categoryId,
+                type: "GET",
+                dataType: "json",
+                success: function (data) {
+                    console.log(data);
+                    $('#items').html(data);
+
+
+                }
+
+            });
+        }
+                @endif
+
         $(document).ready(function() {
+
             $('select[name="theme"]').on('change', function() {
                 var name = $(this).val();
                 console.log(name);
@@ -108,6 +159,7 @@
         });
     </script>
     <script type="text/javascript">
+
         $(document).on('change', '.artists', function(){
             var categoryId = $(this).val();
 

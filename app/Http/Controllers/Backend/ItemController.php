@@ -29,16 +29,17 @@ class ItemController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(ItemDataTable $item)
+    public function index(ItemDataTable $item)//for view of all details of the items
     {
-        if(Auth::user()->Cstatus=="Admin")
+        if(Auth::user()->Cstatus=="Admin")///{{Cstatus = User Type: Admin, Buyer, Seller, A customer who buys and sells item in fothebys as "Both" )
+            // When a user  tries to access this view the Cstatus of the user will  be checked
         return $item->render('backend.Item.indexItem');
 
         else
             return  redirect('/redirect');
 
     }
-    public function verified(ItemVerifiedDataTable $item)
+    public function verified(ItemVerifiedDataTable $item)//for the details of verified items
     {
         if(Auth::user()->Cstatus=="Admin")
             return $item->render('backend.Item.indexItem');
@@ -47,16 +48,17 @@ class ItemController extends Controller
             return  redirect('/redirect');
 
     }
-    public function unVerified(ItemUnVerifiedDataTable $item)
+    public function unVerified(ItemUnVerifiedDataTable $item)//renders the details of unverified items
     {
-        if(Auth::user()->Cstatus=="Admin")
+        if(Auth::user()->Cstatus=="Admin")///{{Cstatus = User Type: Admin, Buyer, Seller, A customer who buys and sells item in fothebys as "Both" )
+            // When a user  tries to access this view the Cstatus of the user will  be checked
 
             return $item->render('backend.Item.indexItem');
 
     else
         return  redirect('/redirect');
     }
-    public function inReview(InReviewDataTable $item)
+    public function inReview(InReviewDataTable $item)//renders the details of items in review
     {
         if(Auth::user()->Cstatus=="Admin")
             return $item->render('backend.Item.indexItem');
@@ -64,7 +66,7 @@ class ItemController extends Controller
         else
             return  redirect('/redirect');
     }
-    public function bought(boughtDataTable $item)
+    public function bought(boughtDataTable $item)//renders the details of item bought by the user
     {
             if (Auth::user()->Cstatus == "Buyer"){
                 return $item->render('backend.Item.buyerItem');
@@ -78,13 +80,14 @@ class ItemController extends Controller
             return  redirect('/redirect');
 
     }
-    public function sold(soldDataTable $item)
+    public function sold(soldDataTable $item)//renders the details of the item sold by the user
     {
             if (Auth::user()->Cstatus == "Seller"){
                 return $item->render('backend.Item.sellerItem');
 
             }
-            elseif(Auth::user()->Cstatus == "Both"){
+            elseif(Auth::user()->Cstatus == "Both"){///{{Cstatus = User Type: Admin, Buyer, Seller, A customer who buys and sells item in fothebys as "Both" )
+                // When a user  tries to access this view the Cstatus of the user will  be checked
                 return $item->render('backend.Item.bothItem');
 
         }
@@ -93,6 +96,8 @@ class ItemController extends Controller
 
     }
 
+
+    //this function runs after the category is changed and according to the category the additional details of those category is added to the form with this function
     public function addDetail($id)
     {
         if(Auth::user()->Cstatus=="Admin") {
@@ -254,7 +259,6 @@ class ItemController extends Controller
         }
         $item->client_id=Auth::user()->id;
         $item->classification_id=$request->classification;
-        $item->reservePrice=$request->reservePrice;
         $item->description=$request->description;
         $item->customer_agreement=$request->agreement;
 
@@ -278,16 +282,10 @@ class ItemController extends Controller
 
         }
         $item->lotReferenceNumber=$number;
-        if (!file_exists(public_path() . '/images/item/')) {
-            mkdir(public_path() . '/images/item/');
-        }
-        if ($request->provenance) {
-            $file = $request->file('provenance');
-            $file_name = rand(1345, 9898) . '_' . $file->getClientOriginalName();
-            $file->move(public_path() . '/images/item/', $file_name);
-//            dd($file_name);
-            $item->provenance_details = $file_name;
-        }
+        $item->provenance_details = $request->provenance_details;
+        $item->damage = $request->damage;
+        $item->markings = $request->markings;
+        $item->published = $request->published;
 
         if (!file_exists(public_path() . '/images/item/')) {
             mkdir(public_path() . '/images/item/');
@@ -384,14 +382,14 @@ class ItemController extends Controller
             $detailValue = Detail::find($get->id)->detailValue()->get();
             $count = count($detailValue);
             $i=0;
-            $html=$html.'<div class="card-title">'.$get->name;
+            $html=$html.'<div class="card-title col-md-3 col-sm-3 col-xs-3">'.$get->name.':</div>';
             foreach ($detailValue as $value) {
                 $i=$i+1;
                 if ($value->type == "text") {
                     if ($value->name == "null") {
                         $item_value=DB::table('detail_item_value')->select('string')->where('item_id','=',$id)->where('detail_value_id','=',$value->id);
                         foreach ($item_value->get() as $valueName){
-                            $html=$html.': '.$valueName->string.'</div>';
+                            $html=$html.'<div class="col-md-8 col-sm-8 col-xs-8"> '.$valueName->string.'</div>';
 
 //                            dd($html);
 
@@ -403,13 +401,11 @@ class ItemController extends Controller
                         $item_value=DB::table('detail_item_value')->select('string')->where('item_id','=',$id)->where('detail_value_id','=',$value->id);
                         foreach ($item_value->get() as $valueName){
                             if($i==1)
-                                $html=$html.'<p>'.$name.': '.$valueName->string;
+                                $html=$html.'<br><div class="card-title col-md-3 col-sm-3 col-xs-3">'.$name.':</div><div class="col-md-8 col-sm-8 col-xs-8">'.$valueName->string.'</div>';
                             else
-                                $html=$html.'        '.$name.': '.$valueName->string;
+                                $html=$html.'   <div class="card-title col-md-3 col-sm-3 col-xs-3">     '.$name.':</div><div class="col-md-8 col-sm-8 col-xs-8">'.$valueName->string.'</div>';
 
-                            if($i==$count){
-                                $html=$html.'</p></div>';
-                            }
+
                         }
 
 
@@ -418,7 +414,7 @@ class ItemController extends Controller
                     if ($value->name == "null") {
                         $item_value=DB::table('detail_item_value')->select('integer')->where('item_id','=',$id)->where('detail_value_id','=',$value->id);
                         foreach ($item_value->get() as $valueName){
-                            $html=$html.': '.$valueName->integer.'</div>';
+                            $html=$html.'<div class="col-md-8 col-sm-8 col-xs-8"> '.$valueName->integer.'</div>';
 //                            dd($html);
                         }
 
@@ -428,24 +424,17 @@ class ItemController extends Controller
                         $item_value=DB::table('detail_item_value')->select('integer')->where('item_id','=',$id)->where('detail_value_id','=',$value->id);
                         foreach ($item_value->get() as $valueName){
                             if($i==1)
-                                $html=$html.'<p>'.$name.': '.$valueName->integer;
+                                $html=$html.'<span class="col-md-9"></span> <div class="card-title col-md-3 col-sm-3 col-xs-3">'.$name.':</div><div class="col-md-3 col-sm-3 col-xs-3">'.$valueName->integer.'</div>';
                             else
-                                $html=$html.'        '.$name.': '.$valueName->integer;
+                                $html=$html.'<div class="card-title col-md-3 col-sm-3 col-xs-3">        '.$name.':</div><div class="col-md-3 col-sm-3 col-xs-3"> '.$valueName->integer.'</div>';
 
-//                            if($i==$count){
-//                                $html=$html.'</p></div>';
-//                            }
-//                            $html=$html.'</div><br><div class="card-title">: '.$name.' '.$valueName->integer.'</div>';
-                            if($i==$count){
-                                $html=$html.'</p></div>';
-                            }
                         }
                     }
                 } elseif ($value->type == "date") {
                     if ($value->name == "null") {
                         $item_value=DB::table('detail_item_value')->select('date')->where('item_id','=',$id)->where('detail_value_id','=',$value->id);
                         foreach ($item_value->get() as $valueName){
-                            $html=$html.': '.$valueName->date.'</div>';
+                            $html=$html.':<div class="col-md-8 col-sm-8 col-xs-8"> '.$valueName->date.'</div>';
 //                            dd($html);
                         }
 
@@ -454,21 +443,17 @@ class ItemController extends Controller
                         $item_value=DB::table('detail_item_value')->select('date')->where('item_id','=',$id)->where('detail_value_id','=',$value->id);
                         foreach ($item_value->get() as $valueName){
                             if($i==1)
-                                $html=$html.'<p>'.$name.': '.$valueName->date;
+                                $html=$html.'<br><div class="card-title col-md-3 col-sm-3 col-xs-3">'.$name.':</div><div class="col-md-8 col-sm-8 col-xs-8">'.$valueName->date.'</div>';
                             else
-                                $html=$html.'        '.$name.': '.$valueName->date;
+                                $html=$html.' <br><div class="card-title col-md-3 col-sm-3 col-xs-3">       '.$name.':</div><div class="col-md-8 col-sm-8 col-xs-8"> '.$valueName->date.'</div>';
 
-//                            $html=$html.'<div class="card-title">: '.$name.' '.$valueName->date.'</div>';
-                            if($i==$count){
-                                $html=$html.'</p></div>';
-                            }
+//
                         }
                     }
                 }
 
             }
         }
-
 
         $item=Item::find($id);
 if(Auth::user()->Cstatus=="Both")
@@ -497,14 +482,14 @@ if(Auth::user()->Cstatus=="Seller")
             $detailValue = Detail::find($get->id)->detailValue()->get();
             $count = count($detailValue);
             $i=0;
-            $html=$html.'<div class="card-title">'.$get->name;
+            $html=$html.'<div class="card-title col-md-3 col-sm-3 col-xs-3">'.$get->name.':</div>';
             foreach ($detailValue as $value) {
                 $i=$i+1;
                 if ($value->type == "text") {
                     if ($value->name == "null") {
                         $item_value=DB::table('detail_item_value')->select('string')->where('item_id','=',$id)->where('detail_value_id','=',$value->id);
                         foreach ($item_value->get() as $valueName){
-                            $html=$html.': '.$valueName->string.'</div>';
+                            $html=$html.'<div class="col-md-8 col-sm-8 col-xs-8"> '.$valueName->string.'</div>';
 
 //                            dd($html);
 
@@ -516,13 +501,11 @@ if(Auth::user()->Cstatus=="Seller")
                         $item_value=DB::table('detail_item_value')->select('string')->where('item_id','=',$id)->where('detail_value_id','=',$value->id);
                         foreach ($item_value->get() as $valueName){
                             if($i==1)
-                                $html=$html.'<p>'.$name.': '.$valueName->string;
+                                $html=$html.'<br><div class="card-title col-md-3 col-sm-3 col-xs-3">'.$name.':</div><div class="col-md-8 col-sm-8 col-xs-8">'.$valueName->string.'</div>';
                             else
-                                $html=$html.'        '.$name.': '.$valueName->string;
+                                $html=$html.'   <div class="card-title col-md-3 col-sm-3 col-xs-3">     '.$name.':</div><div class="col-md-8 col-sm-8 col-xs-8">'.$valueName->string.'</div>';
 
-                            if($i==$count){
-                                $html=$html.'</p></div>';
-                            }
+
                         }
 
 
@@ -531,7 +514,7 @@ if(Auth::user()->Cstatus=="Seller")
                     if ($value->name == "null") {
                         $item_value=DB::table('detail_item_value')->select('integer')->where('item_id','=',$id)->where('detail_value_id','=',$value->id);
                         foreach ($item_value->get() as $valueName){
-                            $html=$html.': '.$valueName->integer.'</div>';
+                            $html=$html.'<div class="col-md-8 col-sm-8 col-xs-8"> '.$valueName->integer.'</div>';
 //                            dd($html);
                         }
 
@@ -541,24 +524,17 @@ if(Auth::user()->Cstatus=="Seller")
                         $item_value=DB::table('detail_item_value')->select('integer')->where('item_id','=',$id)->where('detail_value_id','=',$value->id);
                         foreach ($item_value->get() as $valueName){
                             if($i==1)
-                                $html=$html.'<p>'.$name.': '.$valueName->integer;
+                                $html=$html.'<span class="col-md-9"></span> <div class="card-title col-md-3 col-sm-3 col-xs-3">'.$name.':</div><div class="col-md-3 col-sm-3 col-xs-3">'.$valueName->integer.'</div>';
                             else
-                                $html=$html.'        '.$name.': '.$valueName->integer;
+                                $html=$html.'<div class="card-title col-md-3 col-sm-3 col-xs-3">        '.$name.':</div><div class="col-md-3 col-sm-3 col-xs-3"> '.$valueName->integer.'</div>';
 
-//                            if($i==$count){
-//                                $html=$html.'</p></div>';
-//                            }
-//                            $html=$html.'</div><br><div class="card-title">: '.$name.' '.$valueName->integer.'</div>';
-                            if($i==$count){
-                                $html=$html.'</p></div>';
-                            }
                         }
                     }
                 } elseif ($value->type == "date") {
                     if ($value->name == "null") {
                         $item_value=DB::table('detail_item_value')->select('date')->where('item_id','=',$id)->where('detail_value_id','=',$value->id);
                         foreach ($item_value->get() as $valueName){
-                            $html=$html.': '.$valueName->date.'</div>';
+                            $html=$html.':<div class="col-md-8 col-sm-8 col-xs-8"> '.$valueName->date.'</div>';
 //                            dd($html);
                         }
 
@@ -567,20 +543,18 @@ if(Auth::user()->Cstatus=="Seller")
                         $item_value=DB::table('detail_item_value')->select('date')->where('item_id','=',$id)->where('detail_value_id','=',$value->id);
                         foreach ($item_value->get() as $valueName){
                             if($i==1)
-                                $html=$html.'<p>'.$name.': '.$valueName->date;
+                                $html=$html.'<br><div class="card-title col-md-3 col-sm-3 col-xs-3">'.$name.':</div><div class="col-md-8 col-sm-8 col-xs-8">'.$valueName->date.'</div>';
                             else
-                                $html=$html.'        '.$name.': '.$valueName->date;
+                                $html=$html.' <br><div class="card-title col-md-3 col-sm-3 col-xs-3">       '.$name.':</div><div class="col-md-8 col-sm-8 col-xs-8"> '.$valueName->date.'</div>';
 
-//                            $html=$html.'<div class="card-title">: '.$name.' '.$valueName->date.'</div>';
-                            if($i==$count){
-                                $html=$html.'</p></div>';
-                            }
+//
                         }
                     }
                 }
 
             }
         }
+
 
 
         $item=Item::find($id);
@@ -646,9 +620,8 @@ if(Auth::user()->Cstatus=="Seller")
             }
             $item->client_id = Auth::user()->id;
             $item->classification_id = $request->classification;
-            $item->reservePrice = $request->reservePrice;
             $item->description = $request->description;
-            $item->customer_agreement = $request->agreement;
+            $item->customer_agreement = $request->customer_agreement;
 
             $latestNumber = Item::orderBy('created_at', 'DESC')->first();
 //        dd($latestNumber);
@@ -669,16 +642,13 @@ if(Auth::user()->Cstatus=="Seller")
 
             }
             $item->lotReferenceNumber = $number;
-            if (!file_exists(public_path() . '/images/item/')) {
-                mkdir(public_path() . '/images/item/');
-            }
-            if ($request->provenance) {
-                $file = $request->file('provenance');
-                $file_name = rand(1345, 9898) . '_' . $file->getClientOriginalName();
-                $file->move(public_path() . '/images/item/', $file_name);
-//            dd($file_name);
-                $item->provenance_details = $file_name;
-            }
+
+                $item->provenance_details = $request->provenance_details;
+                $item->damage = $request->damage;
+                $item->markings = $request->markings;
+            $item->published = $request->published;
+
+
             if (!file_exists(public_path() . '/images/item/')) {
                 mkdir(public_path() . '/images/item/');
             }
@@ -766,10 +736,12 @@ if(Auth::user()->Cstatus=="Seller")
                 'approved'=>$request->approve,
                 'signed_date'=>date('Y-m-d'),
 
-                'expert_name'=>$request->expert_name
+                'expert_name'=>$request->expert_name,
+                'reservePrice'=>$request->reservePrice
 
 
             ]);
+
             if($request->approve=="allowed"){
                 $client = User::find($request->client_id);
                 $name = $client->FirstName;

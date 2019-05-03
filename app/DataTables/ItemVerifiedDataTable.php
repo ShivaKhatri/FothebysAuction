@@ -14,7 +14,7 @@ class ItemVerifiedDataTable extends DataTable
      * @param mixed $query Results from query() method.
      * @return \Yajra\DataTables\DataTableAbstract
      */
-    public function dataTable($query)
+    public function dataTable($query)//to show the details of the verified items
     {
         return datatables($query)
             ->addColumn('action', function ($detail) {

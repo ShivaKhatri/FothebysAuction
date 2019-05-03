@@ -36,7 +36,11 @@ class SearchController extends Controller
      */
     public function store(Request $request)
     {
-        $item = Item::where('approved','=', 'allowed')->where('Piece_Title', 'LIKE', '%' . $request->search . '%')->orWhere('artists', 'LIKE', '%' . $request->search . '%')->orWhere('lotReferenceNumber', 'LIKE', '%' . $request->search . '%');
+        $item = Item::where('Piece_Title', 'LIKE', '%' . $request->search . '%')->orWhere('artists', 'LIKE', '%' . $request->search . '%')->orWhere('lotReferenceNumber', 'LIKE', '%' . $request->search . '%')->get();
+
+        $item=$item->where('approved','=', 'allowed');
+
+//        dd($item);
 
         if ($request->has('itemName')) {
             $item->where('Piece_Title', 'LIKE', '%' . $request->itemName . '%');
@@ -44,11 +48,11 @@ class SearchController extends Controller
         if ($request->has('artistName')) {
             $item->where('artists', 'LIKE', '%' . $request->artistName . '%');
         }
-        if ($request->has('from')) {
-            $item->where('from', 'LIKE', '%' . $request->from . '%');
+        if ($request->from!=null) {
+            $item->where('from', '<=',  $request->from);
         }
-        if ($request->has('to')) {
-            $item->where('to', 'LIKE', '%' . $request->to . '%');
+        if ($request->to!=null) {
+            $item->where('to', '>=', $request->to);
         }
         if ($request->has('category')) {
             $item->where('category_id', '=',  $request->category);
@@ -56,7 +60,7 @@ class SearchController extends Controller
         if ($request->has('classification')) {
             $item->where('classification_id', '=',  $request->classification);
         }
-        $item=$item->get();
+
 //        dd($item);
         return view('frontend.search')->with('item',$item);
 
@@ -72,10 +76,10 @@ class SearchController extends Controller
             $item->where('artists', 'LIKE', '%' . $request->artistName . '%');
         }
         if ($request->from!=null) {
-            $item->where('from', 'LIKE', '%' . $request->from . '%');
+            $item->where('from', '<=',  $request->from);
         }
         if ($request->to!=null) {
-            $item->where('to', 'LIKE', '%' . $request->to . '%');
+            $item->where('to', '>=', $request->to);
         }
         if ($request->category!=null) {
             $item->where('category_id', '=',  $request->category);

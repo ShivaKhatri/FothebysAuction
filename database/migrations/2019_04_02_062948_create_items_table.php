@@ -36,6 +36,9 @@ class CreateItemsTable extends Migration
             $table->integer('client_id')->nullable();
             $table->string('authenticated')->nullable();//admin
             $table->string('provenance_details');
+            $table->string('damage');
+            $table->string('markings');
+            $table->string('published');
             $table->string('customer_agreement');
             $table->integer('expert_id')->nullable();//admin
             $table->string('expert_name')->nullable();//admin

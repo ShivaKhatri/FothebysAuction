@@ -47,7 +47,7 @@
                             <label for="type" class="control-label col-md-3 col-sm-3 col-xs-12" >{{ __('Select Value Type') }}</label>
 
                             <div class="col-md-6 col-sm-6 col-xs-12">
-                                {{ Form::select('type',['text'=>'Text','number'=>'Number','date'=>'Date','radio'=>'Select One Type','checkbox'=>'Multiple'],null,['class'=>'form-control','id'=>'title','required'=>'', 'placeholder'=>'Select Input Value Type']) }}
+                                {{ Form::select('type',['text'=>'Text','number'=>'Number','date'=>'Date'],null,['class'=>'form-control','id'=>'title','required'=>'', 'placeholder'=>'Select Input Value Type']) }}
                             </div>
                         </div>
                         <div class="form-group">

@@ -14,32 +14,35 @@ class AdminDatatable extends DataTable
      * @param mixed $query Results from query() method.
      * @return \Yajra\DataTables\DataTableAbstract
      */
-    public function dataTable($query)
+    public function dataTable($query)//to show the details of the administrators of this system
     {
+        //to add ,edit and allow concatenated columns to be filtered in the existing datable
         return datatables($query)
             ->addColumn('Added_By', function ($user) {
-                $get=User::find($user->id);
+                $get=User::find($user->id);//gets the users details
 
-                $admin=User::find($get->added_by);
+                $admin=User::find($get->added_by);//gets the admin details who added the user
                 if($admin==null)
-                    $wow="Added By Super Admin";
+                    $html="Added By Super Admin";
                 else
-                $wow='<b>'.$admin->FirstName.' '.$admin->Surname.'</b>';
+                    $html='<b>'.$admin->FirstName.' '.$admin->Surname.'</b>';
 
-                return $wow;
+                return $html;
             })
-            ->addColumn('action', function ($user) {
+            ->addColumn('action', function ($user) {//adds the column action to the datatable
                 return '<a href="'.route('users.edit',$user->id).'" class="btn btn-sm btn-primary" style="margin:3px"><i
                                                     class="glyphicon glyphicon-edit"></i> Edit</a></a>&nbsp;&nbsp;<a href="'.route('users.destroy',$user->id).'" class="btn btn-sm btn-danger" id="delete" ><i class="glyphicon glyphicon-remove"></i> Delete</a>';
             })
 
-            ->filterColumn('name', function ($query, $keyword) {
+            ->filterColumn('name', function ($query, $keyword) {//making the concatenated column to be filterable
 
                 $keywords = trim($keyword);
-                $query->whereRaw("CONCAT(FirstName, Surname) like ?", ["%{$keywords}%"]);
+                $query->whereRaw("CONCAT(FirstName, Surname) like ?", ["%{$keywords}%"]);//concatenates the users first and surname and
+                                                                                        // then searches the with the keyword entered in the datatable
 
             })
-            ->rawColumns(['Added_By', 'action']);
+            ->rawColumns(['Added_By', 'action']);//the html elements in the column will not be printed as
+                                                //they are instead the element will work as intended
     }
 
     /**
@@ -50,9 +53,8 @@ class AdminDatatable extends DataTable
      */
     public function query(User $model)
     {
-        return $model->newQuery()->select('id', DB::raw('CONCAT(FirstName," ", Surname ) AS name'),
-            'email',
-            'phone_no')->where('Cstatus','=','Admin');
+        return $model->newQuery()->select('id', DB::raw('CONCAT(FirstName," ", Surname ) AS name'), 'email', 'phone_no')
+                                ->where('Cstatus','=','Admin');
     }
 
     /**

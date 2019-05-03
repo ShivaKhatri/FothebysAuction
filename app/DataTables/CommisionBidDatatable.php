@@ -15,7 +15,7 @@ class CommisionBidDatatable extends DataTable
      * @param mixed $query Results from query() method.
      * @return \Yajra\DataTables\DataTableAbstract
      */
-    public function dataTable($query)
+    public function dataTable($query)//to show the commission bid in a auction
     {
         return datatables($query)
             ->addColumn('Client', function ($getId) {

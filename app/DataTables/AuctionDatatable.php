@@ -14,13 +14,13 @@ class AuctionDatatable extends DataTable
      * @param mixed $query Results from query() method.
      * @return \Yajra\DataTables\DataTableAbstract
      */
-    public function dataTable($query)
+    public function dataTable($query)//to show the details of the auction
     {
         return datatables($query)
             ->addColumn('action', function ($detail) {
                 $Dname=Auction::find($detail->id);
 
-                if($Dname->status==0){
+                if($Dname->status==0){//if the auction has no been published the action column will include the publish button
                     return '<a href="'.route('auction.publish',$detail->id).'" class="btn btn-sm btn-success" style="margin:3px">
                          Publish</a><a href="'.route('auction.edit',$detail->id).'" class="btn btn-sm btn-primary" style="margin:3px">
                         <i class="glyphicon glyphicon-edit"></i> Edit</a>&nbsp;&nbsp;<a href="'.route('auction.destroy',$detail->id).'" class="btn btn-sm btn-danger" id="delete" ><i class="glyphicon glyphicon-remove"></i> Delete</a>';
@@ -33,14 +33,14 @@ class AuctionDatatable extends DataTable
 
                 }
            })
-            ->addColumn('Added_by', function ($detail) {
+            ->addColumn('Added_by', function ($detail) {//to show who added the auction
 
                 $Dname=Auction::find($detail->id)->admin()->first();
                 $wow='<strong>'.$Dname->FirstName.' '. $Dname->Surname.'</strong>';
 //                dd($wow);
                 return $wow;
             })
-            ->addColumn('status', function ($detail) {
+            ->addColumn('status', function ($detail) {// to show if the auction has been published or not
                 $wow='';
                 $Dname=Auction::find($detail->id);
                 if($Dname->status==0){
@@ -53,21 +53,21 @@ class AuctionDatatable extends DataTable
                 }
                 return $wow;
             })
-            ->addColumn('theme', function($auction) {
+            ->addColumn('theme', function($auction) {//theme of the auction
                 $Dname=Auction::find($auction->id);
-                if($Dname->themeName=="Category"){
+                if($Dname->themeName=="Category"){//if the  theme of the auction is named  based on category
                     $category=$Dname->category()->first();
                     $wow='<strong style="text-decoration-color: #0b2e13">'.$category->name.'</strong>';
 
                 }
-                else{
+                else{//if the theme of the auction is based on the artists name
                     $wow='<strong style="text-decoration-color: #0b2e13">'.$Dname->themeValue.'</strong>';
 
                 }
 
                 return $wow;
             })
-            ->editColumn('session', function($auction) {
+            ->editColumn('session', function($auction) {//checks the session of the auction
                 $Dname=Auction::find($auction->id);
                 if($Dname->session==1){
                     $wow='<strong style="text-decoration-color: #0b2e13">First Session</strong>';
@@ -84,7 +84,8 @@ class AuctionDatatable extends DataTable
 
                 return $wow;
             })
-            ->rawColumns(['status','theme','Added_by','action','session']);
+            ->rawColumns(['status','theme','Added_by','action','session']);//the html elements in the column will not be printed as
+                                                                            //they are instead the element will work as intended
     }
 
     /**

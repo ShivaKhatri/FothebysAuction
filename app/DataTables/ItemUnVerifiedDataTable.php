@@ -14,7 +14,7 @@ class ItemUnVerifiedDataTable extends DataTable
      * @param mixed $query Results from query() method.
      * @return \Yajra\DataTables\DataTableAbstract
      */
-    public function dataTable($query)
+    public function dataTable($query)//to show unverified or archived items
     {
         return datatables($query)
             ->addColumn('action', function ($detail) {

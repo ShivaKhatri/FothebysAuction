@@ -14,7 +14,7 @@ class LimitCommissionBidDataTable extends DataTable
      * @param mixed $query Results from query() method.
      * @return \Yajra\DataTables\DataTableAbstract
      */
-    public function dataTable($query)
+    public function dataTable($query)//to show the limit of users amount they can bid
     {
         return datatables($query)
             ->addColumn('User_Type', function ($user) {

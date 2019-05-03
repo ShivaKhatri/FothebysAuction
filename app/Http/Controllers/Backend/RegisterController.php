@@ -29,8 +29,9 @@ class RegisterController extends Controller
 
     {
 //        dd(Auth::user()->Cstatus);
-        if(Auth::user()->Cstatus=="Admin")
-            return $user->render('backend.Users.indexUser');
+        if(Auth::check()){
+            if(Auth::user()->Cstatus=="Admin")
+            return $user->render('backend.Users.indexUser');}
         else
             return redirect('/redirect');
 
@@ -40,7 +41,8 @@ class RegisterController extends Controller
     public function buyer(BuyerDatatable $user)
 
     {
-        if(Auth::user()->Cstatus=="Admin")
+        if(Auth::user()->Cstatus=="Admin")//{{Cstatus = User Type: Admin, Buyer, Seller, A customer who buys and sells item in fothebys as "Both" )
+            // When a user  tries to access this view the Cstatus of the user will  be checked
             return $user->render('backend.Users.indexUser');
 
         else
@@ -50,7 +52,8 @@ class RegisterController extends Controller
     public function seller(SellersDatatable $user)
 
     {
-        if(Auth::user()->Cstatus=="Admin")
+        if(Auth::user()->Cstatus=="Admin")//{{Cstatus = User Type: Admin, Buyer, Seller, A customer who buys and sells item in fothebys as "Both" )
+            // When a user  tries to access this view the Cstatus of the user will  be checked
             return $user->render('backend.Users.indexUser');
 
 
@@ -74,7 +77,8 @@ class RegisterController extends Controller
     public function customer(CustomerDatatable $user)
 
     {
-        if(Auth::user()->Cstatus=="Admin")
+        if(Auth::user()->Cstatus=="Admin")//{{Cstatus = User Type: Admin, Buyer, Seller, A customer who buys and sells item in fothebys as "Both" )
+            // When a user  tries to access this view the Cstatus of the user will  be checked
             return $user->render('backend.Users.indexUser');
 
 
@@ -86,7 +90,8 @@ class RegisterController extends Controller
     public function admin(AdminDatatable $user)
 
     {
-        if(Auth::user()->Cstatus=="Admin")
+        if(Auth::user()->Cstatus=="Admin")//{{Cstatus = User Type: Admin, Buyer, Seller, A customer who buys and sells item in fothebys as "Both" )
+            // When a user  tries to access this view the Cstatus of the user will  be checked
             return $user->render('backend.Users.indexUser');
 
 
@@ -156,7 +161,11 @@ class RegisterController extends Controller
         }
         $user->password=bcrypt($request->password);
         $user->save();
+        if(Auth::check())
         return redirect('users');
+        else
+            return redirect('/redirect');
+
 
     }
 
@@ -344,7 +353,8 @@ class RegisterController extends Controller
 
     public function verified(verifiedUsersDatatable $verified){
 
-        if(Auth::user()->Cstatus=="Admin") {
+        if(Auth::user()->Cstatus=="Admin") {//{{Cstatus = User Type: Admin, Buyer, Seller, A customer who buys and sells item in fothebys as "Both" )
+            // When a user  tries to access this view the Cstatus of the user will  be checked
 
             return $verified->render('backend.Users.indexUser');
 
@@ -356,7 +366,8 @@ class RegisterController extends Controller
     }
     public function unVerified(UnVerifiedDatatable $unverified){
 
-        if(Auth::user()->Cstatus=="Admin") {
+        if(Auth::user()->Cstatus=="Admin") {//{{Cstatus = User Type: Admin, Buyer, Seller, A customer who buys and sells item in fothebys as "Both" )
+            // When a user  tries to access this view the Cstatus of the user will  be checked
 
             return $unverified->render('backend.Users.indexUser');
 
@@ -368,7 +379,8 @@ class RegisterController extends Controller
     }
     public function pending(pendingDatatable $user){
 
-        if(Auth::user()->Cstatus=="Admin") {
+        if(Auth::user()->Cstatus=="Admin") {//{{Cstatus = User Type: Admin, Buyer, Seller, A customer who buys and sells item in fothebys as "Both" )
+            // When a user  tries to access this view the Cstatus of the user will  be checked
 
             return $user->render('backend.Users.indexUser');
 

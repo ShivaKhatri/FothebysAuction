@@ -14,7 +14,7 @@ class SellersDatatable extends DataTable
      * @param mixed $query Results from query() method.
      * @return \Yajra\DataTables\DataTableAbstract
      */
-    public function dataTable($query)
+    public function dataTable($query)//to show the details of the sellers details
     {       return datatables($query)
         ->addColumn('verified_by', function ($user) {
             $get=User::find($user->id);

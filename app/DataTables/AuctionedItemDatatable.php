@@ -14,7 +14,7 @@ class AuctionedItemDatatable extends DataTable
      * @param mixed $query Results from query() method.
      * @return \Yajra\DataTables\DataTableAbstract
      */
-    public function dataTable($query)
+    public function dataTable($query)//to show the details of the auctioned items
     {
         return datatables($query)
             ->addColumn('action', function ($detail) {
@@ -66,7 +66,7 @@ class AuctionedItemDatatable extends DataTable
      */
     public function query(Item $model)
     {
-        return $model->newQuery()->select('id','lotReferenceNumber', 'sold','estimated_price_from', 'estimated_price_to', 'reservePrice')->where('approved','=','notAllowed');
+        return $model->newQuery()->select('id','lotReferenceNumber', 'sold','estimated_price_from', 'estimated_price_to', 'reservePrice')->where('approved','=','allowed');
 
     }
 

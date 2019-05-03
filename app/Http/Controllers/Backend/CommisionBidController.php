@@ -21,7 +21,7 @@ class CommisionBidController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(CommisionBidDatatable $datatable, ClientBidDataTable $cdatatable)
+    public function index(CommisionBidDatatable $datatable, ClientBidDataTable $cdatatable)//here the datatable is called and assigned to variable and rendered into the view
     {
         if(Auth::user()->Cstatus=="Admin")
         return $datatable->render('backend.comission_bid.index');
@@ -89,7 +89,7 @@ class CommisionBidController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {
+    {//stores the commission bid data
         $commission=new Commission_Bid();
         $commission->auction_id=$request->auction_id;
         $commission->open=$request->open;
@@ -113,7 +113,6 @@ class CommisionBidController extends Controller
 
     /**
      * Show the form for editing the specified resource.
-     *
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
@@ -152,7 +151,6 @@ class CommisionBidController extends Controller
 
     /**
      * Update the specified resource in storage.
-     *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
      * @return \Illuminate\Http\Response
@@ -171,7 +169,6 @@ class CommisionBidController extends Controller
 
     /**
      * Remove the specified resource from storage.
-     *
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
@@ -189,6 +186,8 @@ class CommisionBidController extends Controller
         else
             return redirect('/redirect');
     }
+
+    ///admin updates the users commission limit
     public function limitIndex(LimitCommissionBidDataTable $datatable)
     {
         if(Auth::user()->Cstatus=="Admin")
@@ -196,6 +195,8 @@ class CommisionBidController extends Controller
         else
             return redirect('/redirect');
     }
+
+    //updates the users biding limit, admin submits the new value and it is updated here
     public function updateLimit(Request $request, $id)
     {
         $detail=User::find($id);

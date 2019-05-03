@@ -5,12 +5,23 @@
         <div class="row justify-content-center">
             <div class="col-md-8">
                 <div class="card">
-                    <div class="card-header">{{ __('Register') }}</div>
+                    <div class="card-header">{{ __('Submit Your Details') }}</div>
 
                     <div class="card-body">
                         <form method="POST" action="{{ route('users.store') }}">
                             @csrf
+                            <div   class="form-group row">
+                                <label for="type" class="col-md-4 col-form-label text-md-right">{{ __('Title') }}</label>
 
+                                <div class="col-md-6">
+                                    {{ Form::select('title',['Mr'=>'Mr','Mrs'=>'Mrs','Miss'=>'Miss','Ms'=>'Ms','Mx'=>'Mx','Master'=>'Master'],null,['class'=>'form-control','id'=>'title','required'=>'', 'placeholder'=>'Select Title']) }}
+                                    @if ($errors->has('title'))
+                                        <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $errors->first('title') }}</strong>
+                                    </span>
+                                    @endif
+                                </div>
+                            </div>
                             <div class="form-group row">
                                 <label for="FirstName" class="col-md-4 col-form-label text-md-right">{{ __('Name') }}</label>
 
@@ -58,7 +69,20 @@
                                     @endif
                                 </div>
                             </div>
-                            <input name="Astatus" value="UnVerified" type="hidden">
+                            <div   class="form-group row">
+                                <label for="type" class="col-md-4 col-form-label text-md-right">{{ __('Address') }}</label>
+
+                                <div class="col-md-6">
+                                    <input id="address" type="text" class="form-control{{ $errors->has('address') ? ' is-invalid' : '' }}" name="address" value="{{ old('address') }}" required autofocus>
+
+                                    @if ($errors->has('address'))
+                                        <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $errors->first('address') }}</strong>
+                                    </span>
+                                    @endif
+                                </div>
+                            </div>
+                            <input name="Astatus" value="inReview" type="hidden">
                             <input name="type" value="Seller" type="hidden">
                             <div id="BankNo" class="form-group row">
 
